@@ -19,7 +19,6 @@
             </thead>
             <tbody>
                 @foreach($compares['income'] as $category_id => $category)
-                @php dd($compares['income']); @endphp
                     <tr>
                         <td class="col-sm-2">{{ $income_categories[$category_id] }}</td>
                         @foreach($category as $i => $item)

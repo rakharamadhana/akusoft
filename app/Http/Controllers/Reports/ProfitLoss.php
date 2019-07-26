@@ -228,7 +228,7 @@ class ProfitLoss extends Controller
                 }
             }
 
-            dd($compares['income']['24']);
+            // dd($compares['income']['24']);
 
             $compares[$group][$item->category_id][$date]['amount'] += $amount;
             $compares[$group][$item->category_id][$date]['currency_code'] = $item->currency_code;
