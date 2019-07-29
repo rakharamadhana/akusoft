@@ -32,34 +32,84 @@ class Categories extends Seeder
                 'name' => trans_choice('general.transfers', 1),
                 'type' => 'other',
                 'color' => '#605ca8',
-                'enabled' => '1'
+                'enabled' => '0'
             ],
             [
                 'company_id' => $company_id,
                 'name' => trans('demo.categories_deposit'),
                 'type' => 'income',
                 'color' => '#f39c12',
-                'enabled' => '1'
-            ],
-            [
-                'company_id' => $company_id,
-                'name' => trans('demo.categories_sales'),
-                'type' => 'income',
-                'color' => '#6da252',
-                'enabled' => '1'
-            ],
-            [
-                'company_id' => $company_id,
-                'name' => trans_choice('general.others', 1),
-                'type' => 'expense',
-                'color' => '#d2d6de',
-                'enabled' => '1'
+                'enabled' => '0'
             ],
             [
                 'company_id' => $company_id,
                 'name' => trans('general.general'),
                 'type' => 'item',
                 'color' => '#00c0ef',
+                'enabled' => '1'
+            ],
+            [
+                'company_id' => $company_id,
+                'name' => '410 Penjualan Barang Dagangan',
+                'type' => 'income',
+                'type_id' => '3',
+                'color' => '#6da252',
+                'enabled' => '1'
+            ],
+            [
+                'company_id' => $company_id,
+                'name' => '510 Harga Pokok Penjualan (HPP)',
+                'type' => 'hpp',
+                'type_id' => '4',
+                'color' => '#c99736',
+                'enabled' => '1'
+            ],
+            [
+                'company_id' => $company_id,
+                'name' => '520 Biaya Tenaga Kerja',
+                'type' => 'expense',
+                'type_id' => '5',
+                'color' => '#f740f0',
+                'enabled' => '1'
+            ],
+            [
+                'company_id' => $company_id,
+                'name' => '531 Sewa Toko',
+                'type' => 'expense',
+                'type_id' => '5',
+                'color' => '#22877b',
+                'enabled' => '1'
+            ],
+            [
+                'company_id' => $company_id,
+                'name' => '532 Biaya Perlengkapan Usaha',
+                'type' => 'expense',
+                'type_id' => '5',
+                'color' => '#e3dd52',
+                'enabled' => '1'
+            ],
+            [
+                'company_id' => $company_id,
+                'name' => '533 Biaya Kebersihan & Keamanan',
+                'type' => 'expense',
+                'type_id' => '5',
+                'color' => '#f75959',
+                'enabled' => '1'
+            ],
+            [
+                'company_id' => $company_id,
+                'name' => '534 Biaya Listrik, Telepon, & Air',
+                'type' => 'expense',
+                'type_id' => '5',
+                'color' => '#85d2f2',
+                'enabled' => '1'
+            ],
+            [
+                'company_id' => $company_id,
+                'name' => '590 Biaya Lainnya',
+                'type' => 'expense',
+                'type_id' => '5',
+                'color' => '#d2d6de',
                 'enabled' => '1'
             ],
         ];

@@ -8,6 +8,7 @@ use App\Http\Requests\Auth\User as Request;
 use Illuminate\Http\Request as ARequest;
 use App\Models\Auth\User;
 use App\Models\Auth\Role;
+use App\Models\Common\Company;
 
 use Auth;
 
@@ -42,6 +43,7 @@ class Register extends Controller
     {
         $this->middleware('guest')->except('logout');
     }*/
+
     public function __construct()
     {
         $this->middleware('guest', ['except' => 'destroy']);
@@ -54,7 +56,7 @@ class Register extends Controller
 
     public function store(Request $request)
     {
-
+        
         // Create the user
         $user = User::create([
             'name' => $request->get('name'),
@@ -62,14 +64,36 @@ class Register extends Controller
             'password' => $request->get('password'),
             'roles' => '2',
             'companies' => '2',
-            'locale' => 'en-US',
+            'locale' => 'id-ID',
         ]);
+
+        // Create company
+        $company = Company::create([
+            'domain' => $request->get('company_name'),
+        ]);
+
+        // Set settings
+        setting()->setExtraColumns(['company_id' => $company->id]);
+        setting()->set([
+            'general.company_name'          => $request->get('company_name'),
+            'general.company_email'         => $request->get('email'),
+            'general.default_currency'      => 'IDR',
+            'general.default_locale'        => 'id-ID',
+        ]);
+        setting()->save();
 
         // Attach admin role
         $user->roles()->attach('2');
 
         // Attach company
-        $user->companies()->attach('2');
+        $user->companies()->attach($company->id);
+
+        // Redirect
+        $message = "Berhasil mendaftarkan pengguna baru";
+
+        flash($message)->success();
+
+        return redirect('auth/login');
     }
 
     public function destroy()
@@ -89,4 +113,5 @@ class Register extends Controller
             $request->session()->getHandler()->destroy($request->session()->getId());
         }
     }
+
 }

@@ -33,7 +33,7 @@ class TestCompany extends Seeder
         $rows = [
             [
                 'id' => '1',
-                'domain' => 'test.com',
+                'domain' => 'akusoftapp.com',
             ],
         ];
 
@@ -43,12 +43,13 @@ class TestCompany extends Seeder
 
         setting()->setExtraColumns(['company_id' => '1']);
         setting()->set([
-            'general.company_name'              => 'Test Inc.',
-            'general.company_email'             => 'info@test.com',
-            'general.company_address'           => 'New Street 1254',
+            'general.company_name'              => 'AKUSOFT V.2',
+            'general.company_email'             => 'admin@akusoftapp.com',
+            'general.company_address'           => 'Indonesia',
             'general.financial_start'           => '01-01',
-            'general.default_currency'          => 'USD',
+            'general.default_currency'          => 'IDR',
             'general.default_account'           => '1',
+            'general.admin_theme'               => 'skin-black',
             'general.default_payment_method'    => 'offlinepayment.cash.1',
             'general.schedule_bill_days'        => '10,5,3,1',
             'general.schedule_invoice_days'     => '1,3,5,10',
@@ -65,8 +66,8 @@ class TestCompany extends Seeder
         // Create user
         $user = User::create([
             'name' => 'Admin',
-            'email' => 'admin@akaunting.com',
-            'password' => '123456',
+            'email' => 'admin@akusoftapp.com',
+            'password' => 'admin123',
             'last_logged_in_at' => Date::now(),
         ]);
 

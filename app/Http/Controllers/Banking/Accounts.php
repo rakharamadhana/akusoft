@@ -19,6 +19,8 @@ class Accounts extends Controller
     {
         $accounts = Account::collect();
 
+        // dd($accounts);
+
         return view('banking.accounts.index', compact('accounts'));
     }
 

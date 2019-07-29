@@ -31,7 +31,7 @@
 
 <div class="row" style="margin-top: 50px;">
     <div class="col-md-12 no-padding-right text-center">
-        <a href="{{ url('/') }}" class="btn btn-lg btn-success"><span class="fa fa-dashboard"></span> &nbsp;{{ trans('general.go_to', ['name' => trans('general.dashboard')]) }}</a>
+        <a href="{{ url('/banking/accounts') }}" class="btn btn-lg btn-success"><span class="fa fa-dashboard"></span> &nbsp;{{ trans('general.go_to', ['name' => trans('general.accounts')]) }}</a>
     </div>
 </div>
 

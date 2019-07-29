@@ -28,29 +28,9 @@
             </span>
         @endif
     </div>
-
-    <div class="form-group has-feedback{{ $errors->has('company_name') ? ' has-error' : '' }}">
-        <input name="company_name" type="text" class="form-control" placeholder="{{ trans('general.name') }}" required autofocus>
-        <span class="glyphicon glyphicon-user form-control-feedback"></span>
-        @if ($errors->has('company_name'))
-            <span class="help-block">
-                <strong>{{ $errors->first('company_name') }}</strong>
-            </span>
-        @endif
-    </div>
     
     <div class="form-group has-feedback{{ $errors->has('password') ? ' has-error' : '' }}">
         <input name="password" type="password" class="form-control" placeholder="{{ trans('auth.password.current') }}" required>
-        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-        @if ($errors->has('password'))
-            <span class="help-block">
-                <strong>{{ $errors->first('password') }}</strong>
-            </span>
-        @endif
-    </div>
-
-    <div class="form-group has-feedback{{ $errors->has('password') ? ' has-error' : '' }}">
-        <input name="password_confirmation" type="password" class="form-control" placeholder="{{ trans('auth.password.current_confirm') }}" required>
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         @if ($errors->has('password'))
             <span class="help-block">

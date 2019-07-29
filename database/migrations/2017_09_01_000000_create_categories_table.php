@@ -17,6 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->integer('company_id');
             $table->string('name');
             $table->string('type');
+            $table->string('type_id')->nullable();
             $table->string('color');
             $table->boolean('enabled');
             $table->timestamps();
