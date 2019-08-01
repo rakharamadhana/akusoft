@@ -40,6 +40,16 @@ class AdminMenu
                 'order' => 1,
             ]);
 
+            //Accounts
+            if ($user->can('read-banking-accounts')) {
+                $menu->add([
+                    'url' => 'banking/accounts',
+                    'title' => trans_choice('general.accounts', 2),
+                    'icon' => 'fa fa-cubes',
+                    'order' => 2,
+                ]);
+            }
+
             // Items
             if ($user->can('read-common-items-off')) {
                 $menu->add([
@@ -90,18 +100,40 @@ class AdminMenu
                 ]);
             }
 
-            // Banking
-            if ($user->can(['read-banking-accounts', 'read-banking-transfers', 'read-banking-transactions', 'read-banking-reconciliations'])) {
-                $menu->dropdown(trans('general.banking'), function ($sub) use($user, $attr) {
-                    if ($user->can('read-banking-accounts')) {
-                        $sub->url('banking/accounts', trans_choice('general.accounts', 2), 1, $attr);
+            // Transactions
+            if ($user->can(['read-banking-transactions'])) {
+                $menu->dropdown(trans_choice('general.transactions', 2), function ($sub) use($user, $attr) {
+
+                    if ($user->can('read-banking-transactions')) {
+                        $sub->url('banking/transactions?date=&accounts%5B%5D=1&type=&limit=25', 'Transaksi Kas', 2, $attr);
                     }
+
+                    if ($user->can('read-banking-transactions')) {
+                        $sub->url('banking/transactions?date=&accounts%5B%5D=2&type=&limit=25', 'Transaksi Bank', 3, $attr);
+                    }
+
+                    if ($user->can('read-banking-transactions')) {
+                        $sub->url('banking/transactions?date=&accounts%5B%5D=3&type=&limit=25', 'Transaksi Piutang', 4, $attr);
+                    }
+
+                    if ($user->can('read-banking-transactions')) {
+                        $sub->url('banking/transactions?date=&accounts%5B%5D=9&accounts%5B%5D=10&accounts%5B%5D=11&accounts%5B%5D=12&type=&limit=25', 'Transaksi Hutang', 5, $attr);
+                    }
+                }, 5, [
+                    'title' => trans_choice('general.transactions', 2),
+                    'icon' => 'fa fa-exchange',
+                ]);
+            }
+
+            // Banking
+            if ($user->can(['read-banking-transfers', 'read-banking-transactions', 'read-banking-reconciliations'])) {
+                $menu->dropdown(trans('general.banking'), function ($sub) use($user, $attr) {
 
                     if ($user->can('read-banking-transfers')) {
                         $sub->url('banking/transfers', trans_choice('general.transfers', 2), 2, $attr);
                     }
 
-                    if ($user->can('read-banking-transactions')) {
+                    if ($user->can('read-banking-transactions-off')) {
                         $sub->url('banking/transactions', trans_choice('general.transactions', 2), 3, $attr);
                     }
 
@@ -123,15 +155,15 @@ class AdminMenu
                 'read-reports-profit-loss',
             ])) {
                 $menu->dropdown(trans_choice('general.reports', 2), function ($sub) use($user, $attr) {
-                    if ($user->can('read-reports-income-summary')) {
+                    if ($user->can('read-reports-income-summary-off')) {
                         $sub->url('reports/income-summary', trans('reports.summary.income'), 1, $attr);
                     }
 
-                    if ($user->can('read-reports-expense-summary')) {
+                    if ($user->can('read-reports-expense-summary-off')) {
                         $sub->url('reports/expense-summary', trans('reports.summary.expense'), 2, $attr);
                     }
 
-                    if ($user->can('read-reports-income-expense-summary')) {
+                    if ($user->can('read-reports-income-expense-summary-off')) {
                         $sub->url('reports/income-expense-summary', trans('reports.summary.income_expense'), 3, $attr);
                     }
 

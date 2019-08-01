@@ -45,10 +45,6 @@ class ProfitLoss extends Controller
 
         $income_categories = Category::enabled()->type('income')->orderBy('name')->pluck('name', 'id')->toArray();
 
-        $hpp_categories = Category::enabled()->where('type_id',4)->orderBy('name')->pluck('name', 'id')->toArray();
-
-        // dd($hpp_categories);
-
         $expense_categories = Category::enabled()->type('expense')->orderBy('name')->pluck('name', 'id')->toArray();
 
         // Dates
@@ -70,16 +66,7 @@ class ProfitLoss extends Controller
                     'category_id' => $category_id,
                     'name' => $category_name,
                     'amount' => 0,
-                    'currency_code' => setting('general.default_currency'),
-                    'currency_rate' => 1
-                ];
-            }
-
-            foreach ($hpp_categories as $category_id => $category_name) {
-                $compares['hpp'][$category_id][$dates[$j]] = [
-                    'category_id' => $category_id,
-                    'name' => $category_name,
-                    'amount' => 0,
+                    'type_id' => Category::select('type_id')->where('id', $category_id)->first(),
                     'currency_code' => setting('general.default_currency'),
                     'currency_rate' => 1
                 ];
@@ -90,6 +77,7 @@ class ProfitLoss extends Controller
                     'category_id' => $category_id,
                     'name' => $category_name,
                     'amount' => 0,
+                    'type_id' => Category::select('type_id')->where('id', $category_id)->first(),
                     'currency_code' => setting('general.default_currency'),
                     'currency_rate' => 1
                 ];
@@ -112,31 +100,28 @@ class ProfitLoss extends Controller
         $gross['income']['total'] = 0;
         $gross['expense']['total'] = 0;
 
+        $totals[$date]['amount'] = 0;
+        $totals['total']['amount'] = 0;
+
         foreach ($income_categories as $category_id => $category_name) {
             $compares['income'][$category_id]['total'] = [
                 'category_id' => $category_id,
                 'name' => trans_choice('general.totals', 1),
                 'amount' => 0,
+                'type_id' => Category::where('id', $category_id)->first(),
                 'currency_code' => setting('general.default_currency'),
                 'currency_rate' => 1
             ];
         }
 
-        foreach ($hpp_categories as $category_id => $category_name) {
-            $compares['hpp'][$category_id]['total'] = [
-                'category_id' => $category_id,
-                'name' => trans_choice('general.totals', 1),
-                'amount' => 0,
-                'currency_code' => setting('general.default_currency'),
-                'currency_rate' => 1
-            ];
-        }
+
 
         foreach ($expense_categories as $category_id => $category_name) {
             $compares['expense'][$category_id]['total'] = [
                 'category_id' => $category_id,
                 'name' => trans_choice('general.totals', 1),
                 'amount' => 0,
+                'type_id' => Category::where('id', $category_id)->first(),
                 'currency_code' => setting('general.default_currency'),
                 'currency_rate' => 1
             ];
@@ -199,7 +184,7 @@ class ProfitLoss extends Controller
             $view_template = 'reports.profit_loss.index';
         }
 
-        return view($view_template, compact('dates', 'income_categories', 'expense_categories', 'hpp_categories', 'compares', 'totals', 'gross', 'statuses'));
+        return view($view_template, compact('dates', 'income_categories', 'expense_categories', 'compares', 'totals', 'gross', 'statuses'));
     }
 
     private function setAmount(&$totals, &$compares, $items, $type, $date_field)
@@ -228,16 +213,19 @@ class ProfitLoss extends Controller
                 }
             }
 
-            // dd($compares['income']['24']);
-
             $compares[$group][$item->category_id][$date]['amount'] += $amount;
             $compares[$group][$item->category_id][$date]['currency_code'] = $item->currency_code;
             $compares[$group][$item->category_id][$date]['currency_rate'] = $item->currency_rate;
             $compares[$group][$item->category_id]['total']['amount'] += $amount;
 
+            
+
             if ($group == 'income') {
                 $totals[$date]['amount'] += $amount;
                 $totals['total']['amount'] += $amount;
+            } else if ($group == 'hpp') {
+                $totals[$date]['amount'] -= $amount;
+                $totals['total']['amount'] -= $amount;
             } else {
                 $totals[$date]['amount'] -= $amount;
                 $totals['total']['amount'] -= $amount;

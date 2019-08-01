@@ -59,7 +59,7 @@ class Categories extends Seeder
             [
                 'company_id' => $company_id,
                 'name' => '510 Harga Pokok Penjualan (HPP)',
-                'type' => 'hpp',
+                'type' => 'income',
                 'type_id' => '4',
                 'color' => '#c99736',
                 'enabled' => '1'

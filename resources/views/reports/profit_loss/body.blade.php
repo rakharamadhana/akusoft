@@ -22,7 +22,14 @@
                     <tr>
                         <td class="col-sm-2">{{ $income_categories[$category_id] }}</td>
                         @foreach($category as $i => $item)
-                            @php $gross['income'][$i] += $item['amount']; @endphp
+                            
+                            @php 
+                                if($item['type_id']->type_id == 4){
+                                    $gross['income'][$i] -= $item['amount']; 
+                                }else {
+                                    $gross['income'][$i] += $item['amount']; 
+                                }
+                                @endphp
                             <td class="col-sm-2 text-right">@money($item['amount'], setting('general.default_currency'), true)</td>
                         @endforeach
                     </tr>
@@ -30,39 +37,14 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th class="col-sm-2">Total Pemasukan</th>
+                    <th class="col-sm-2">Laba Kotor</th>
                     @foreach($gross['income'] as $item)
                         <th class="col-sm-2 text-right">@money($item, setting('general.default_currency'), true)</th>
                     @endforeach
                 </tr>
             </tfoot>
         </table>
-        <table class="table table-hover" style="margin-top: 40px">
-            <thead>
-                <tr>
-                    <th class="col-sm-2" colspan="6">HPP</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($compares['hpp'] as $category_id => $category)
-                    <tr>
-                        <td class="col-sm-2">{{ $hpp_categories[$category_id] }}</td>
-                        @foreach($category as $i => $item)
-                            @php $gross['income'][$i] -= $item['amount']; @endphp
-                            <td class="col-sm-2 text-right">@money($item['amount'], setting('general.default_currency'), true)</td>
-                        @endforeach
-                    </tr>
-                @endforeach
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th class="col-sm-2">{{ trans('reports.gross_profit') }}</th>
-                    @foreach($gross['income'] as $item)
-                        <th class="col-sm-2 text-right">@money($item, setting('general.default_currency'), true)</th>
-                    @endforeach
-                </tr>
-            </tfoot>
-        </table>
+        
         <table class="table table-hover" style="margin-top: 40px">
             <thead>
                 <tr>
@@ -93,9 +75,11 @@
             <tbody>
                 <tr>
                     <th class="col-sm-2" colspan="6">{{ trans('reports.net_profit') }}</th>
-                    @foreach($totals as $total)
-                        <th class="col-sm-2 text-right"><span>@money($total['amount'], $total['currency_code'], true)</span></th>
+                    @foreach($dates as $date)
+                        @php $total['amount'] = $gross['income'][$date] - $gross['expense'][$date] @endphp
+                        <th class="col-sm-2 text-right"><span>@money($total['amount'], setting('general.default_currency'), true)</span></th>
                     @endforeach
+                    <th class="col-sm-2 text-right"><span>@money($gross['income']['total'] - $gross['expense']['total'], setting('general.default_currency'), true)</span></th>
                 </tr>
             </tbody>
         </table>

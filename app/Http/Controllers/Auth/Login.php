@@ -79,7 +79,12 @@ class Login extends Controller
             return redirect($path);
         }
 
-        return redirect()->intended('wizard');
+        // Redirect
+        $message = "Apabila anda pengguna baru, mohon isi akun awal terlebih dahulu";
+
+        flash($message)->warning();
+
+        return redirect('banking/accounts');
     }
 
     public function destroy()

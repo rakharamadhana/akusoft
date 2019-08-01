@@ -78,11 +78,31 @@ class TaxSummary extends Controller
             $j+=2;
         }
 
+        $totals['total'] = [
+            'amount' => 0,
+            'currency_code' => setting('general.default_currency'),
+            'currency_rate' => 1
+        ];
+
+        foreach ($dates as $date) {
+            $gross['income'][$date] = 0;
+            $gross['expense'][$date] = 0;
+        }
+
+        $gross['income']['total'] = 0;
+        $gross['expense']['total'] = 0;
+
+        $totals['harta'] = 0;
+        $totals['kewajiban'] = 0;
+        $totals['modal'] = 0;
+        $totals['harta-kewajiban-modal'] = 0;
+
         switch ($status) {
             case 'paid':
                 // Invoices
                 $invoices = InvoicePayment::with(['invoice', 'invoice.totals'])->monthsOfYear('paid_at')->get();
                 $this->setAmount($incomes, $totals, $invoices, 'invoice', 'paid_at');
+                
                 // Bills
                 $bills = BillPayment::with(['bill', 'bill.totals'])->monthsOfYear('paid_at')->get();
                 $this->setAmount($expenses, $totals, $bills, 'bill', 'paid_at');
@@ -103,7 +123,7 @@ class TaxSummary extends Controller
                 $bills = Bill::with(['totals'])->accrued()->monthsOfYear('billed_at')->get();
                 $this->setAmount($expenses, $totals, $bills, 'bill', 'billed_at');
                 break;
-        }
+        }        
 
         $statuses = collect([
             'all' => trans('general.all'),
@@ -121,6 +141,7 @@ class TaxSummary extends Controller
         $accounts_modal = Account::where('type', 3)
                ->orderBy('number', 'asc')
                ->get();
+        $sum = Account::where('type', 1)->sum('opening_balance');
         // dd($accounts);
 
         // Check if it's a print or normal request
@@ -130,11 +151,12 @@ class TaxSummary extends Controller
             $view_template = 'reports.tax_summary.index';
         }
 
-        return view($view_template, compact('dates', 'taxes', 'incomes', 'expenses', 'totals', 'statuses', 'accounts', 'accounts_harta', 'accounts_kewajiban', 'accounts_modal'));
+        return view($view_template, compact('dates', 'taxes', 'incomes', 'expenses', 'totals', 'sum', 'statuses', 'accounts', 'accounts_harta', 'accounts_kewajiban', 'accounts_modal'));
     }
 
     private function setAmount(&$items, &$totals, $rows, $type, $date_field)
     {
+        
         foreach ($rows as $row) {
             if (($row->getTable() == 'bill_payments') || ($row->getTable() == 'invoice_payments')) {
                 $type_row = $row->$type;
@@ -176,6 +198,7 @@ class TaxSummary extends Controller
                     $totals[$row_total->name][$date]['amount'] -= $amount;
                 }
             }
+            
         }
     }
 }

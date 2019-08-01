@@ -145,7 +145,7 @@ Route::group(['middleware' => 'language'], function () {
                 Route::resource('income-summary', 'Reports\IncomeSummary');
                 Route::resource('expense-summary', 'Reports\ExpenseSummary');
                 Route::resource('income-expense-summary', 'Reports\IncomeExpenseSummary');
-                Route::get('balance-summary', 'Reports\TaxSummary@index');
+                Route::resource('balance-summary', 'Reports\TaxSummary');
                 Route::resource('profit-loss', 'Reports\ProfitLoss');
             });
 
