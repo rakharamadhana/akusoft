@@ -29,7 +29,10 @@
     <link rel="stylesheet" href="{{ asset('public/css/app.css?v=' . version('short')) }}">
     <link rel="stylesheet" href="{{ asset('public/css/akaunting-green.css?v=' . version('short')) }}">
     
-    <!-- <link rel="shortcut icon" href="{{ asset('public/img/favicon.ico') }}"> -->
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ asset('public/img/favicon.ico') }}" type="image/x-icon">
+    
     
     @stack('css')
 
