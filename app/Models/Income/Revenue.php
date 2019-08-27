@@ -25,7 +25,7 @@ class Revenue extends Model
      *
      * @var array
      */
-    protected $fillable = ['company_id', 'account_id', 'paid_at', 'amount', 'currency_code', 'currency_rate', 'customer_id', 'description', 'category_id', 'payment_method', 'reference', 'parent_id'];
+    protected $fillable = ['company_id', 'account_id', 'paid_at', 'amount', 'currency_code', 'currency_rate', 'customer_id', 'income_type','item_id','item_quantity','description', 'category_id', 'payment_method', 'reference', 'parent_id'];
 
     /**
      * Sortable columns.

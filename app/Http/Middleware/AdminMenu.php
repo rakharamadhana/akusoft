@@ -45,18 +45,18 @@ class AdminMenu
                 $menu->add([
                     'url' => 'banking/accounts',
                     'title' => trans_choice('general.accounts', 2),
-                    'icon' => 'fa fa-cubes',
+                    'icon' => 'fa fa-server',
                     'order' => 2,
                 ]);
             }
 
             // Items
-            if ($user->can('read-common-items-off')) {
+            if ($user->can('read-common-items')) {
                 $menu->add([
                     'url' => 'common/items',
                     'title' => trans_choice('general.items', 2),
                     'icon' => 'fa fa-cubes',
-                    'order' => 2,
+                    'order' => 3,
                 ]);
             }
 
@@ -74,7 +74,7 @@ class AdminMenu
                     if ($user->can('read-incomes-customers')) {
                         $sub->url('incomes/customers', trans_choice('general.customers', 2), 3, $attr);
                     }
-                }, 3, [
+                }, 4, [
                     'title' => trans_choice('general.incomes', 2),
                     'icon' => 'fa fa-money',
                 ]);
@@ -100,28 +100,13 @@ class AdminMenu
                 ]);
             }
 
-            // Transactions
-            if ($user->can(['read-banking-transactions'])) {
-                $menu->dropdown(trans_choice('general.transactions', 2), function ($sub) use($user, $attr) {
-
-                    if ($user->can('read-banking-transactions')) {
-                        $sub->url('banking/transactions?date=&accounts%5B%5D=1&type=&limit=25', 'Transaksi Kas', 2, $attr);
-                    }
-
-                    if ($user->can('read-banking-transactions')) {
-                        $sub->url('banking/transactions?date=&accounts%5B%5D=2&type=&limit=25', 'Transaksi Bank', 3, $attr);
-                    }
-
-                    if ($user->can('read-banking-transactions')) {
-                        $sub->url('banking/transactions?date=&accounts%5B%5D=3&type=&limit=25', 'Transaksi Piutang', 4, $attr);
-                    }
-
-                    if ($user->can('read-banking-transactions')) {
-                        $sub->url('banking/transactions?date=&accounts%5B%5D=9&accounts%5B%5D=10&accounts%5B%5D=11&accounts%5B%5D=12&type=&limit=25', 'Transaksi Hutang', 5, $attr);
-                    }
-                }, 5, [
+            // Transaction
+            if ($user->can('read-banking-transactions')) {
+                $menu->add([
+                    'url' => 'banking/transactions',
                     'title' => trans_choice('general.transactions', 2),
                     'icon' => 'fa fa-exchange',
+                    'order' => 4,
                 ]);
             }
 

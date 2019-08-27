@@ -41,6 +41,43 @@
         </div>
         @stack('customer_id_input_end')
 
+        @stack('income_type_input_start')
+        <div class="form-group col-md-12 {{ $errors->has('income_type') ? 'has-error' : ''}}">
+            {!! Form::label('income_type', 'Tipe Pendapatan', ['class' => 'control-label']) !!}
+            <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-bars"></i></div>
+                {!! Form::select('income_type', array(1 => 'Penjualan Barang', 2 => 'Non Penjualan Barang'), 0, array_merge(['class' => 'form-control', 'placeholder' => trans('general.form.select.field', ['field' => 'Tipe'])])) !!}
+                <div class="input-group-append">
+                </div>
+            </div>
+            {!! $errors->first('income_type', '<p class="help-block">:message</p>') !!}
+        </div>
+        @stack('income_type_input_end')
+
+        @stack('item_id_input_start')
+        <div class="form-group col-md-6">
+            {!! Form::label('item_id', trans_choice('general.items', 1), ['class' => 'control-label']) !!}
+            <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-cube"></i></div>
+                {!! Form::select('item_id', $items, setting('general.default_item'), array_merge(['class' => 'form-control', 'placeholder' => trans('general.form.select.field', ['field' => trans_choice('general.items', 1)])])) !!}
+                <div class="input-group-append">
+                </div>
+            </div>
+        </div>
+        @stack('item_id_input_end')
+
+        @stack('item_quantity_input_start')
+        <div class="form-group col-md-6">
+            {!! Form::label('item_quantity', 'Kuantitas', ['class' => 'control-label']) !!}
+            <div class="input-group">
+                <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
+                {!! Form::number('item_quantity', 'value', array_merge(['class' => 'form-control', 'placeholder' => '0'])) !!}
+                <div class="input-group-append">
+                </div>
+            </div>
+        </div>
+        @stack('item_quantity_input_end')
+
         {{ Form::textareaGroup('description', trans('general.description')) }}
 
         @stack('category_id_input_start')
@@ -120,6 +157,18 @@
             });
 
             $("#account_id").select2({
+                placeholder: "{{ trans('general.form.select.field', ['field' => trans_choice('general.accounts', 1)]) }}"
+            });
+
+            $("#item_id").select2({
+                placeholder: "{{ trans('general.form.select.field', ['field' => trans_choice('general.items', 1)]) }}"
+            });
+
+            $("#item_quantity").select2({
+                placeholder: "{{ trans('general.form.select.field', ['field' => 0]) }}"
+            });
+
+            $("#income_type").select2({
                 placeholder: "{{ trans('general.form.select.field', ['field' => trans_choice('general.accounts', 1)]) }}"
             });
 

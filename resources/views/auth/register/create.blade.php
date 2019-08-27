@@ -30,7 +30,7 @@
     </div>
 
     <div class="form-group has-feedback{{ $errors->has('company_name') ? ' has-error' : '' }}">
-        <input name="company_name" type="text" class="form-control" placeholder="{{ trans('general.name') }}" required autofocus>
+        <input name="company_name" type="text" class="form-control" placeholder="Nama Perusahaan" required autofocus>
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
         @if ($errors->has('company_name'))
             <span class="help-block">

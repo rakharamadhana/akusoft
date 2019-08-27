@@ -24,17 +24,24 @@ class Revenue extends Request
      */
     public function rules()
     {
-        return [
-            'account_id' => 'required|integer',
-            'paid_at' => 'required|date_format:Y-m-d H:i:s',
-            'amount' => 'required|amount',
-            'currency_code' => 'required|string|currency',
-            'currency_rate' => 'required',
-            'customer_id' => 'nullable|integer',
-            'category_id' => 'required|integer',
-            'payment_method' => 'required|string',
-            'attachment' => 'mimes:' . setting('general.file_types') . '|between:0,' . setting('general.file_size') * 1024,
-        ];
+        $rules = [];
+
+        $rules['account_id'] = 'required|integer';
+        $rules['paid_at'] = 'required|date_format:Y-m-d H:i:s';
+        $rules['amount'] = 'required|amount';
+        $rules['income_type'] = 'required';
+        $rules['currency_code'] = 'required|string|currency';
+        $rules['currency_rate'] = 'required';
+        $rules['customer_id'] = 'nullable|integer';
+        $rules['category_id'] = 'required|integer';
+        $rules['payment_method'] = 'required|string';
+        $rules['attachment'] = 'mimes:' . setting('general.file_types') . '|between:0,' . setting('general.file_size') * 1024;
+
+        if ($this->attributes->get('income_type') == 1) {
+            $rules['item_id'] = 'required';
+        }
+
+        return $rules;
     }
 
     public function withValidator($validator)

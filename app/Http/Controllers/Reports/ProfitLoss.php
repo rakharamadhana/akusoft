@@ -47,6 +47,8 @@ class ProfitLoss extends Controller
 
         $expense_categories = Category::enabled()->type('expense')->orderBy('name')->pluck('name', 'id')->toArray();
 
+        $hpp_categories = Category::enabled()->type('expense')->orderBy('name')->pluck('name', 'id')->toArray();
+
         // Dates
         for ($j = 1; $j <= 12; $j++) {
             $ym_string = is_array($year) ? $financial_start->addQuarter()->format('Y-m') : $year . '-' . $j;
@@ -82,6 +84,19 @@ class ProfitLoss extends Controller
                     'currency_rate' => 1
                 ];
             }
+
+            foreach ($hpp_categories as $category_id => $category_name) {
+                $compares['expense'][$category_id][$dates[$j]] = [
+                    'category_id' => $category_id,
+                    'name' => $category_name,
+                    'amount' => 0,
+                    'type_id' => Category::select('type_id')->where('id', $category_id)->first(),
+                    'currency_code' => setting('general.default_currency'),
+                    'currency_rate' => 1
+                ];
+            }
+
+            //dd($hpp_categories, $compares['expense'][5]);
 
             $j += 2;
         }
@@ -184,7 +199,7 @@ class ProfitLoss extends Controller
             $view_template = 'reports.profit_loss.index';
         }
 
-        return view($view_template, compact('dates', 'income_categories', 'expense_categories', 'compares', 'totals', 'gross', 'statuses'));
+        return view($view_template, compact('dates', 'income_categories', 'expense_categories', 'compares', 'totals', 'gross', 'statuses', 'hpp_categories'));
     }
 
     private function setAmount(&$totals, &$compares, $items, $type, $date_field)

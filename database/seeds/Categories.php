@@ -59,7 +59,7 @@ class Categories extends Seeder
             [
                 'company_id' => $company_id,
                 'name' => '510 Harga Pokok Penjualan (HPP)',
-                'type' => 'income',
+                'type' => 'expense',
                 'type_id' => '4',
                 'color' => '#c99736',
                 'enabled' => '1'
@@ -102,6 +102,30 @@ class Categories extends Seeder
                 'type' => 'expense',
                 'type_id' => '5',
                 'color' => '#85d2f2',
+                'enabled' => '1'
+            ],
+            [
+                'company_id' => $company_id,
+                'name' => '535 Biaya ATK',
+                'type' => 'expense',
+                'type_id' => '5',
+                'color' => '#85d5f5',
+                'enabled' => '1'
+            ],
+            [
+                'company_id' => $company_id,
+                'name' => '536 Biaya Konsumsi Dapur',
+                'type' => 'expense',
+                'type_id' => '5',
+                'color' => '#85d7f7',
+                'enabled' => '1'
+            ],
+            [
+                'company_id' => $company_id,
+                'name' => '540 Biaya Transportasi',
+                'type' => 'expense',
+                'type_id' => '5',
+                'color' => '#85d9f9',
                 'enabled' => '1'
             ],
             [

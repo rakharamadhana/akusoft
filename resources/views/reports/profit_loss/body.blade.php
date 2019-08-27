@@ -37,8 +37,44 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <th class="col-sm-2">Laba Kotor</th>
+                    <th class="col-sm-2">Total Pemasukan</th>
                     @foreach($gross['income'] as $item)
+                        <th class="col-sm-2 text-right">@money($item, setting('general.default_currency'), true)</th>
+                    @endforeach
+                </tr>
+            </tfoot>
+        </table>
+
+        <table class="table table-hover" style="margin-top: 40px">
+            <thead>
+                <tr>
+                    <th class="col-sm-2" colspan="6">HPP</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($compares['expense'] as $category_id => $category)
+                    @php if($category_id == 5) { @endphp
+                        <tr>
+                            <td class="col-sm-2">{{ $expense_categories[$category_id] }}</td>
+                            @foreach($category as $i => $item)                        
+                                @php 
+                                    if($item['type_id']->type_id == 4){
+                                        $gross['expense'][$i] += $item['amount'];
+                                    } else {
+                                        $gross['expense'][$i] += $item['amount']; 
+                                    }
+                                @endphp
+                                <td class="col-sm-2 text-right">@money($item['amount'], setting('general.default_currency'), true)</td>
+                            @endforeach
+                        </tr>
+                    @php } @endphp
+                @endforeach
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th class="col-sm-2">Total HPP</th>
+                    @foreach($gross['expense'] as $item)
+                    @php dd($gross['expense']) @endphp
                         <th class="col-sm-2 text-right">@money($item, setting('general.default_currency'), true)</th>
                     @endforeach
                 </tr>
@@ -53,13 +89,23 @@
             </thead>
             <tbody>
                 @foreach($compares['expense'] as $category_id => $category)
-                    <tr>
-                        <td class="col-sm-2">{{ $expense_categories[$category_id] }}</td>
-                        @foreach($category as $i => $item)
-                            @php $gross['expense'][$i] += $item['amount']; @endphp
-                            <td class="col-sm-2 text-right">@money($item['amount'], setting('general.default_currency'), true)</td>
-                        @endforeach
-                    </tr>
+                    @php if($category_id == 5) { @endphp
+                    
+                    @php } else { @endphp
+                        <tr>
+                            <td class="col-sm-2">{{ $expense_categories[$category_id] }}</td>
+                            @foreach($category as $i => $item)                        
+                                @php 
+                                    if($item['type_id']->type_id == 4){
+                                        $gross['expense'][$i] -= $item['amount'];
+                                    } else {
+                                        $gross['expense'][$i] += $item['amount']; 
+                                    }
+                                @endphp
+                                <td class="col-sm-2 text-right">@money($item['amount'], setting('general.default_currency'), true)</td>
+                            @endforeach
+                        </tr>
+                    @php } @endphp
                 @endforeach
             </tbody>
             <tfoot>
@@ -71,6 +117,7 @@
                 </tr>
             </tfoot>
         </table>
+        
         <table class="table" style="margin-top: 40px">
             <tbody>
                 <tr>

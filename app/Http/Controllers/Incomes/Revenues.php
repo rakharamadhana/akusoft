@@ -7,6 +7,7 @@ use App\Http\Requests\Income\Revenue as Request;
 use App\Models\Banking\Account;
 use App\Models\Income\Customer;
 use App\Models\Income\Revenue;
+use App\Models\Item\Item;
 use App\Models\Setting\Category;
 use App\Models\Setting\Currency;
 use App\Traits\Currencies;
@@ -59,6 +60,8 @@ class Revenues extends Controller
     {
         $accounts = Account::enabled()->orderBy('name')->pluck('name', 'id');
 
+        $items = Item::enabled()->orderBy('name')->pluck('name', 'id');
+
         $currencies = Currency::enabled()->orderBy('name')->pluck('name', 'code')->toArray();
 
         $account_currency_code = Account::where('id', setting('general.default_account'))->pluck('currency_code')->first();
@@ -71,7 +74,7 @@ class Revenues extends Controller
 
         $payment_methods = Modules::getPaymentMethods();
 
-        return view('incomes.revenues.create', compact('accounts', 'currencies', 'account_currency_code', 'currency', 'customers', 'categories', 'payment_methods'));
+        return view('incomes.revenues.create', compact('accounts', 'items', 'currencies', 'account_currency_code', 'currency', 'customers', 'categories', 'payment_methods'));
     }
 
     /**
@@ -83,8 +86,19 @@ class Revenues extends Controller
      */
     public function store(Request $request)
     {
+        if ($request->input('item_id')){
+            $input['item_id'] = $request->input('item_id');
+            $input['quantity'] = $request->input('item_quantity');
+    
+            $items = Item::enabled()->where('id',$input['item_id'])->first();;
+    
+            $items->update([
+                'quantity' => $items['quantity'] - $input['quantity']
+            ]);   
+        }
+             
         $revenue = Revenue::create($request->input());
-
+        
         // Upload attachment
         if ($request->file('attachment')) {
             $media = $this->getMedia($request->file('attachment'), 'revenues');
