@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Banking\Account as Request;
 use App\Models\Banking\Account;
 use App\Models\Setting\Currency;
+use Auth;
 
 class Accounts extends Controller
 {
@@ -66,6 +67,54 @@ class Accounts extends Controller
         }
 
         $message = trans('messages.success.added', ['type' => trans_choice('general.accounts', 1)]);
+
+        flash($message)->success();
+
+        return redirect('banking/accounts');
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  Account  $account
+     *
+     * @return Response
+     */
+    public function first()
+    {
+        $akun_kas = Account::where('company_id', Auth::user()->id)->where('number', 110)->select('name','number')->first();
+        $akun_modal = Account::where('company_id', Auth::user()->id)->where('number', 310)->select('name','number')->first();
+
+        //dd($akun_kas,$akun_modal);
+
+        $currencies = Currency::enabled()->pluck('name', 'code');
+
+        $currency = Currency::where('code', '=', setting('general.default_currency', 'USD'))->first();
+
+        return view('banking.accounts.first', compact('akun_kas','akun_modal','currencies', 'currency'));
+    }
+
+    public function first_store(Request $request)
+    {
+        //Akun Kas
+        //$akun_kas = Account::where('company_id', Auth::user()->id)->where('number', 110)->select('name','number','opening_balance')->first();
+        $akun_kas = Account::where('company_id', Auth::user()->id)->where('number',110)->first();
+
+        //Akun Modal
+        $akun_modal = Account::where('company_id', Auth::user()->id)->where('number', 310)->first();
+
+        //Input Request
+        $account['currency_code'] = $request->currency_code;
+        $account['opening_balance'] = $request->opening_balance;
+        $account['company_id'] = $request->company_id;
+
+        //Editing
+        $akun_kas->opening_balance = $account['opening_balance'];
+        $akun_modal->opening_balance = $account['opening_balance'];
+        $akun_kas->update();
+        $akun_modal->update();
+
+        $message = "Modal telah ditambahkan sebesar ".$account['opening_balance'];
 
         flash($message)->success();
 

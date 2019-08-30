@@ -62,6 +62,7 @@ class Register extends Controller
             'name' => $request->get('name'),
             'email' => $request->get('email'),
             'password' => $request->get('password'),
+            'first_time_login' => true,
             'roles' => '2',
             'companies' => '2',
             'locale' => 'id-ID',

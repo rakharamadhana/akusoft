@@ -79,12 +79,26 @@ class Login extends Controller
             return redirect($path);
         }
 
-        // Redirect
-        $message = "Apabila anda pengguna baru, mohon isi akun awal terlebih dahulu";
+        // Hint: Auth::user() is the currently signed in user object.
+        if ($user->first_time_login) {
+            $user->first_time_login = 0; // Flip the flag to true
+            $user->save(); // By that you tell it to save the new flag value into the users table
+            
+            // Redirect
+            $message = "Mohon isi akun awal terlebih dahulu";
 
-        flash($message)->warning();
+            flash($message)->warning();
 
-        return redirect('banking/accounts');
+            return redirect('banking/accounts/first');
+        } else{
+            // Redirect
+            $message = "Login berhasil. Selamat Datang ".$user->name;
+
+            flash($message)->warning();
+
+            return redirect('banking/accounts');
+        }
+
     }
 
     public function destroy()

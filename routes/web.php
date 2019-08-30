@@ -130,6 +130,8 @@ Route::group(['middleware' => 'language'], function () {
             });
 
             Route::group(['prefix' => 'banking'], function () {
+                Route::get('accounts/first', 'Banking\Accounts@first')->name('accounts.first');
+                Route::post('accounts/first/store', 'Banking\Accounts@first_store')->name('accounts.first_store');
                 Route::get('accounts/currency', 'Banking\Accounts@currency')->name('accounts.currency');
                 Route::get('accounts/{account}/enable', 'Banking\Accounts@enable')->name('accounts.enable');
                 Route::get('accounts/{account}/disable', 'Banking\Accounts@disable')->name('accounts.disable');

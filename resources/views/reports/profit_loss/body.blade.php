@@ -74,7 +74,6 @@
                 <tr>
                     <th class="col-sm-2">Total HPP</th>
                     @foreach($gross['expense'] as $item)
-                    @php dd($gross['expense']) @endphp
                         <th class="col-sm-2 text-right">@money($item, setting('general.default_currency'), true)</th>
                     @endforeach
                 </tr>
@@ -124,11 +123,17 @@
                     <th class="col-sm-2" colspan="6">{{ trans('reports.net_profit') }}</th>
                     @foreach($dates as $date)
                         @php $total['amount'] = $gross['income'][$date] - $gross['expense'][$date] @endphp
+                        
                         <th class="col-sm-2 text-right"><span>@money($total['amount'], setting('general.default_currency'), true)</span></th>
                     @endforeach
+                    @php $laba = $gross['income']['total'] - $gross['expense']['total'] @endphp
                     <th class="col-sm-2 text-right"><span>@money($gross['income']['total'] - $gross['expense']['total'], setting('general.default_currency'), true)</span></th>
                 </tr>
             </tbody>
         </table>
     </div>
+    <span class="update-laba">
+        <a href="{{ url('reports/update-laba/'.$laba) }}" target="_blank" class="btn btn-success btn-sm">&nbsp;Update Akun Laba Bersih</a>
+    </span>
 </div>
+
