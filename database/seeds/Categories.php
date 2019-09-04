@@ -58,6 +58,22 @@ class Categories extends Seeder
             ],
             [
                 'company_id' => $company_id,
+                'name' => '420 Lainnya',
+                'type' => 'income',
+                'type_id' => '3',
+                'color' => '#5da355',
+                'enabled' => '1'
+            ],
+            [
+                'company_id' => $company_id,
+                'name' => 'Laba',
+                'type' => 'income',
+                'type_id' => '4',
+                'color' => '#6da400',
+                'enabled' => '1'
+            ],
+            [
+                'company_id' => $company_id,
                 'name' => '510 Harga Pokok Penjualan (HPP)',
                 'type' => 'expense',
                 'type_id' => '4',

@@ -23,13 +23,7 @@
                         <td class="col-sm-2">{{ $income_categories[$category_id] }}</td>
                         @foreach($category as $i => $item)
                             
-                            @php 
-                                if($item['type_id']->type_id == 4){
-                                    $gross['income'][$i] -= $item['amount']; 
-                                }else {
-                                    $gross['income'][$i] += $item['amount']; 
-                                }
-                                @endphp
+                            @php $gross['income'][$i] += $item['amount']; @endphp
                             <td class="col-sm-2 text-right">@money($item['amount'], setting('general.default_currency'), true)</td>
                         @endforeach
                     </tr>
@@ -53,7 +47,7 @@
             </thead>
             <tbody>
                 @foreach($compares['expense'] as $category_id => $category)
-                    @php if($category_id == 5) { @endphp
+                    @php if($category_id == 7) { @endphp
                         <tr>
                             <td class="col-sm-2">{{ $expense_categories[$category_id] }}</td>
                             @foreach($category as $i => $item)                        
@@ -88,7 +82,7 @@
             </thead>
             <tbody>
                 @foreach($compares['expense'] as $category_id => $category)
-                    @php if($category_id == 5) { @endphp
+                    @php if($category_id == 7) { @endphp
                     
                     @php } else { @endphp
                         <tr>
@@ -132,8 +126,5 @@
             </tbody>
         </table>
     </div>
-    <span class="update-laba">
-        <a href="{{ url('reports/update-laba/'.$laba) }}" target="_blank" class="btn btn-success btn-sm">&nbsp;Update Akun Laba Bersih</a>
-    </span>
 </div>
 

@@ -7,6 +7,7 @@ use App\Http\Requests\Income\Revenue as Request;
 use App\Models\Banking\Account;
 use App\Models\Income\Customer;
 use App\Models\Income\Revenue;
+use App\Models\Expense\Payment as HPP; //For HPP
 use App\Models\Item\Item;
 use App\Models\Setting\Category;
 use App\Models\Setting\Currency;
@@ -16,6 +17,7 @@ use App\Traits\Uploads;
 use App\Utilities\Import;
 use App\Utilities\ImportFile;
 use App\Utilities\Modules;
+use Auth;
 
 class Revenues extends Controller
 {
@@ -70,7 +72,7 @@ class Revenues extends Controller
 
         $customers = Customer::enabled()->orderBy('name')->pluck('name', 'id');
 
-        $categories = Category::enabled()->type('income')->orderBy('name')->pluck('name', 'id');
+        $categories = Category::enabled()->type('income')->orderBy('name')->where('type_id', 3)->pluck('name', 'id');
 
         $payment_methods = Modules::getPaymentMethods();
 
@@ -86,18 +88,103 @@ class Revenues extends Controller
      */
     public function store(Request $request)
     {
+        //dd($request->input());
+
+        // Item Spent
         if ($request->input('item_id')){
             $input['item_id'] = $request->input('item_id');
             $input['quantity'] = $request->input('item_quantity');
     
             $items = Item::enabled()->where('id',$input['item_id'])->first();;
     
+            $items_sale_price = $items->sale_price * $input['quantity'];
+
+            //dd($items_sale_price);
             $items->update([
                 'quantity' => $items['quantity'] - $input['quantity']
             ]);   
         }
-             
-        $revenue = Revenue::create($request->input());
+
+        // Jika Penjualan Barang
+        if($request->input('income_type') == 1) {
+            $hpp_amount = $items->purchase_price * $input['quantity'];
+
+            // Handle Laba
+            if ($items_sale_price != $hpp_amount) {
+                $akun_laba = Account::where('company_id', Auth::user()->id)->where('number',330)->first();
+                $kategori_laba = Category::where('company_id', Auth::user()->id)->where('type','income')->where('type_id', 4)->first();
+                $revenue_laba = Revenue::create([
+                    "paid_at" => $request->paid_at,
+                    "currency_code" => $request->currency_code,
+                    "currency_rate" => $request->currency_rate,
+                    "amount" => $items_sale_price - $hpp_amount,
+                    "account_id" => $akun_laba->id,
+                    "customer_id" => $request->customer_id,
+                    "income_type" => $request->income_type,
+                    "item_id" => $request->item_id,
+                    "item_quantity" => $request->item_quantity,
+                    "description" => "Laba ".$request->description,
+                    "category_id" => $kategori_laba->id,
+                    "recurring_frequency" => $request->recurring_frequency,
+                    "recurring_interval" => $request->recurring_interval,
+                    "recurring_custom_frequency" => $request->recurring_custom_frequency,
+                    "recurring_count" => $request->recurring_count,
+                    "payment_method" => $request->payment_method,
+                    "reference" => $request->reference,
+                    "company_id" => $request->company_id
+                ]);
+            }
+
+            $akun_hpp = Category::where('company_id', Auth::user()->id)->where('type','expense')->where('type_id', 4)->first();
+
+            $hpp = HPP::create([
+                "paid_at" => $request->paid_at,
+                "currency_code" => $request->currency_code,
+                "currency_rate" => $request->currency_rate,
+                "amount" => $hpp_amount,
+                "account_id" => $request->account_id,
+                "vendor_id" => null,
+                "description" => $request->description,
+                "category_id" => $akun_hpp->id, //Akun HPP
+                "recurring_frequency" => $request->recurring_frequency,
+                "recurring_interval" => $request->recurring_interval,
+                "recurring_custom_frequency" => $request->recurring_custom_frequency,
+                "recurring_count" => $request->recurring_count,
+                "payment_method" => $request->payment_method,
+                "reference" => $request->reference,
+                "company_id" => $request->company_id
+            ]);
+
+            if ($request->input('amount') != $items_sale_price) {
+                $revenue = Revenue::create([
+                    "paid_at" => $request->paid_at,
+                    "currency_code" => $request->currency_code,
+                    "currency_rate" => $request->currency_rate,
+                    "amount" => $items_sale_price,
+                    "account_id" => $request->account_id,
+                    "customer_id" => $request->customer_id,
+                    "income_type" => $request->income_type,
+                    "item_id" => $request->item_id,
+                    "item_quantity" => $request->item_quantity,
+                    "description" => $request->description,
+                    "category_id" => $request->category_id,
+                    "recurring_frequency" => $request->recurring_frequency,
+                    "recurring_interval" => $request->recurring_interval,
+                    "recurring_custom_frequency" => $request->recurring_custom_frequency,
+                    "recurring_count" => $request->recurring_count,
+                    "payment_method" => $request->payment_method,
+                    "reference" => $request->reference,
+                    "company_id" => $request->company_id
+                ]);  
+            } else {
+                $revenue = Revenue::create($request->input());
+            }
+        } else {
+            $revenue = Revenue::create($request->input());
+        }
+
+        
+        
         
         // Upload attachment
         if ($request->file('attachment')) {
@@ -165,17 +252,21 @@ class Revenues extends Controller
     {
         $accounts = Account::enabled()->orderBy('name')->pluck('name', 'id');
 
+        $items = Item::enabled()->orderBy('name')->pluck('name', 'id');
+
         $currencies = Currency::enabled()->orderBy('name')->pluck('name', 'code')->toArray();
+
+        $account_currency_code = Account::where('id', setting('general.default_account'))->pluck('currency_code')->first();
 
         $currency = Currency::where('code', $revenue->currency_code)->first();
 
         $customers = Customer::enabled()->orderBy('name')->pluck('name', 'id');
 
-        $categories = Category::enabled()->type('income')->orderBy('name')->pluck('name', 'id');
+        $categories = Category::enabled()->type('income')->orderBy('name')->where('type_id',3)->pluck('name', 'id');
 
         $payment_methods = Modules::getPaymentMethods();
 
-        return view('incomes.revenues.edit', compact('revenue', 'accounts', 'currencies', 'currency', 'customers', 'categories', 'payment_methods'));
+        return view('incomes.revenues.edit', compact('revenue', 'accounts', 'currencies', 'currency', 'customers', 'categories', 'payment_methods', 'account_currency_code', 'items'));
     }
 
     /**

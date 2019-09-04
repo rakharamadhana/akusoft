@@ -65,7 +65,7 @@ class Payments extends Controller
 
         $vendors = Vendor::enabled()->orderBy('name')->pluck('name', 'id');
 
-        $categories = Category::enabled()->where('type','expense')->orWhere('type_id',4)->orderBy('name')->pluck('name', 'id');
+        $categories = Category::enabled()->where('type','expense')->where('type_id',5)->orderBy('name')->pluck('name', 'id');
 
         // dd($categories);
 
@@ -83,6 +83,7 @@ class Payments extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->input());
         $payment = Payment::create($request->input());
 
         // Upload attachment
@@ -157,7 +158,7 @@ class Payments extends Controller
 
         $vendors = Vendor::enabled()->orderBy('name')->pluck('name', 'id');
 
-        $categories = Category::enabled()->type('expense')->orderBy('name')->pluck('name', 'id');
+        $categories = Category::enabled()->type('expense')->where('type_id',5)->orderBy('name')->pluck('name', 'id');
 
         $payment_methods = Modules::getPaymentMethods();
 

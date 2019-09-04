@@ -38,15 +38,63 @@
                 {!! Form::label('account_id', trans_choice('general.accounts', 1), ['class' => 'control-label']) !!}
                 <div class="input-group">
                     <div class="input-group-addon"><i class="fa fa-university"></i></div>
-                    {!! Form::select('account_id', $accounts, null, array_merge(['class' => 'form-control', 'placeholder' => trans('general.form.select.field', ['field' => trans_choice('general.accounts', 1)])])) !!}
+                    {!! Form::select('account_id', $accounts, setting('general.default_account'), array_merge(['class' => 'form-control', 'placeholder' => trans('general.form.select.field', ['field' => trans_choice('general.accounts', 1)])])) !!}
                     <div class="input-group-append">
-                        {!! Form::text('currency', $revenue->currency_code, ['id' => 'currency', 'class' => 'form-control', 'required' => 'required', 'disabled' => 'disabled']) !!}
+                        {!! Form::text('currency', $account_currency_code, ['id' => 'currency', 'class' => 'form-control', 'required' => 'required', 'disabled' => 'disabled']) !!}
                     </div>
                 </div>
             </div>
             @stack('account_id_input_end')
 
-            {{ Form::selectGroup('customer_id', trans_choice('general.customers', 1), 'user', $customers, null, []) }}
+            @stack('customer_id_input_start')
+            <div class="form-group col-md-6">
+                {!! Form::label('customer_id', trans_choice('general.customers', 1), ['class' => 'control-label']) !!}
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-user"></i></div>
+                    {!! Form::select('customer_id', $customers, null, array_merge(['class' => 'form-control', 'placeholder' => trans('general.form.select.field', ['field' => trans_choice('general.customers', 1)])])) !!}
+                    <span class="input-group-btn">
+                        <button type="button" id="button-customer" class="btn btn-default btn-icon"><i class="fa fa-plus"></i></button>
+                    </span>
+                </div>
+            </div>
+            @stack('customer_id_input_end')
+
+            @stack('income_type_input_start')
+            <div class="form-group col-md-12 {{ $errors->has('income_type') ? 'has-error' : ''}}">
+                {!! Form::label('income_type', 'Tipe Pendapatan', ['class' => 'control-label']) !!}
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-bars"></i></div>
+                    {!! Form::select('income_type', array(1 => 'Penjualan Barang', 2 => 'Non Penjualan Barang'), $revenue->income_type, array_merge(['class' => 'form-control', 'placeholder' => trans('general.form.select.field', ['field' => 'Tipe'])])) !!}
+                    <div class="input-group-append">
+                    </div>
+                </div>
+                {!! $errors->first('income_type', '<p class="help-block">:message</p>') !!}
+            </div>
+            @stack('income_type_input_end')
+
+            @stack('item_id_input_start')
+            <div class="form-group col-md-6">
+                {!! Form::label('item_id', trans_choice('general.items', 1), ['class' => 'control-label']) !!}
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-cube"></i></div>
+                    {!! Form::select('item_id', $items, $revenue->item_id, array_merge(['class' => 'form-control', 'placeholder' => trans('general.form.select.field', ['field' => trans_choice('general.items', 1)])])) !!}
+                    <div class="input-group-append">
+                    </div>
+                </div>
+            </div>
+            @stack('item_id_input_end')
+
+            @stack('item_quantity_input_start')
+            <div class="form-group col-md-6">
+                {!! Form::label('item_quantity', 'Kuantitas', ['class' => 'control-label']) !!}
+                <div class="input-group">
+                    <div class="input-group-addon"><i class="fa fa-hashtag"></i></div>
+                    {!! Form::number('item_quantity', $revenue->item_quantity, array_merge(['class' => 'form-control', 'placeholder' => '0'])) !!}
+                    <div class="input-group-append">
+                    </div>
+                </div>
+            </div>
+            @stack('item_quantity_input_end')
 
             {{ Form::textareaGroup('description', trans('general.description')) }}
 

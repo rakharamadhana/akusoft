@@ -43,7 +43,7 @@ class ProfitLoss extends Controller
             $financial_start->subYear()->subQuarter();
         }
 
-        $income_categories = Category::enabled()->type('income')->orderBy('name')->pluck('name', 'id')->toArray();
+        $income_categories = Category::enabled()->type('income')->orderBy('name')->where('type_id',3)->pluck('name', 'id')->toArray();
 
         $expense_categories = Category::enabled()->type('expense')->orderBy('name')->pluck('name', 'id')->toArray();
 
