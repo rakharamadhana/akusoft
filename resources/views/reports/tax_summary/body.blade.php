@@ -20,7 +20,7 @@
                     @foreach($accounts_harta as $item)
                         <tr>
                             @if ($auth_user->can('read-reports-income-expense-summary'))
-                                <td><a href="{{ url('reports/income-expense-summary?accounts[]=' . $item->id) }}">{{ $item->name }}</a></td>
+                                <td>{{ $item->name }}</td>
                             @else
                             
                                 <th class="col-sm-2 text-right">{{ trans('reports.quarter.' . $date) }}</th>
@@ -62,7 +62,7 @@
                     @foreach($accounts_kewajiban as $item)
                         <tr>
                             @if ($auth_user->can('read-reports-income-expense-summary'))
-                                <td><a href="{{ url('reports/income-expense-summary?accounts[]=' . $item->id) }}">{{ $item->name }}</a></td>
+                                <td>{{ $item->name }}</td>
                             @else
                                 <td><a href="{{ route('accounts.edit', $item->id) }}">{{ $item->name }}</a></td>
                             @endif
@@ -98,9 +98,9 @@
                     @foreach($accounts_modal as $item)
                         <tr>
                             @if ($auth_user->can('read-reports-income-expense-summary'))
-                                <td><a href="{{ url('reports/income-expense-summary?accounts[]=' . $item->id) }}">{{ $item->name }}</a></td>
+                                <td>{{ $item->name }}</td>
                             @else
-                                <td><a href="{{ route('accounts.edit', $item->id) }}">{{ $item->name }}</a></td>
+                                <td>{{ $item->name }}</td>
                             @endif                     
                             @php $totals['modal'] += $item->balance; @endphp       
                             <td class="text-right amount-space">@money($item->balance, $item->currency_code, true)</td>
