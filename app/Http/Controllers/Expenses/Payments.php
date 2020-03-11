@@ -12,7 +12,7 @@ use App\Models\Setting\Currency;
 use App\Traits\Uploads;
 use App\Utilities\Import;
 use App\Utilities\ImportFile;
-use App\Utilities\Modules;
+//use App\Utilities\Modules;
 
 class Payments extends Controller
 {
@@ -69,7 +69,7 @@ class Payments extends Controller
 
         // dd($categories);
 
-        $payment_methods = Modules::getPaymentMethods();
+        $payment_methods = Account::query()->orderBy('number')->whereBetween('number',[110,120])->pluck('name','id');
 
         return view('expenses.payments.create', compact('accounts', 'currencies', 'account_currency_code', 'currency', 'vendors', 'categories', 'payment_methods'));
     }
@@ -83,7 +83,12 @@ class Payments extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->input());
+        $amount = $request->input('amount');
+        $payment_method = Account::query()->where('id', $request->input('payment_method'))->first();
+        $payment_method->update([
+            'opening_balance' => $payment_method['opening_balance'] - $amount
+        ]);
+
         $payment = Payment::create($request->input());
 
         // Upload attachment
@@ -160,7 +165,7 @@ class Payments extends Controller
 
         $categories = Category::enabled()->type('expense')->where('type_id',5)->orderBy('name')->pluck('name', 'id');
 
-        $payment_methods = Modules::getPaymentMethods();
+        $payment_methods = Account::query()->orderBy('number')->whereBetween('number',[110,120])->pluck('name','id');
 
         return view('expenses.payments.edit', compact('payment', 'accounts', 'currencies', 'currency', 'vendors', 'categories', 'payment_methods'));
     }
@@ -195,18 +200,25 @@ class Payments extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  Payment  $payment
-     *
-     * @return Response
+     * @param Payment $payment
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @throws \Exception
      */
     public function destroy(Payment $payment)
     {
+        $payment_method = $payment->payment_method;
+        $return_amount = $payment->amount;
+
         // Can't delete transfer payment
         if ($payment->category->id == Category::transfer()) {
             return redirect('expenses/payments');
         }
+
+        $return_cash = Account::query()->where('id', $payment_method)->first();
+
+        $return_cash->update([
+            'opening_balance' => $return_cash['opening_balance'] + $return_amount
+        ]);
 
         $payment->recurring()->delete();
         $payment->delete();

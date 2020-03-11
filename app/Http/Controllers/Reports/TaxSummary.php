@@ -44,7 +44,7 @@ class TaxSummary extends Controller
             $financial_start->subYear()->subMonth();
         }
 
-        $t = Tax::enabled()->where('rate', '<>', '0')->pluck('name')->toArray();
+        $t = Tax::query()->where('rate', '<>', '0')->pluck('name')->toArray();
 
         $taxes = array_combine($t, $t);
 

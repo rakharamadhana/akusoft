@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Banking;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Banking\Account as Request;
 use App\Models\Banking\Account;
+use App\Models\Relation\UserCompanies;
 use App\Models\Setting\Currency;
 use Auth;
 
@@ -97,24 +98,21 @@ class Accounts extends Controller
     public function first_store(Request $request)
     {
         //Akun Kas
-        //$akun_kas = Account::where('company_id', Auth::user()->id)->where('number', 110)->select('name','number','opening_balance')->first();
-        $akun_kas = Account::where('company_id', Auth::user()->id)->where('number',110)->first();
-
-        //Akun Modal
-        $akun_modal = Account::where('company_id', Auth::user()->id)->where('number', 310)->first();
-
-        //Input Request
-        $account['currency_code'] = $request->currency_code;
-        $account['opening_balance'] = $request->opening_balance;
-        $account['company_id'] = $request->company_id;
+        $user_id = Auth::user()->id;
+        $company_id = UserCompanies::query()->where('user_id',$user_id)->pluck('company_id')->first();
+        $opening_balance = $request->opening_balance;
 
         //Editing
-        $akun_kas->opening_balance = $account['opening_balance'];
-        $akun_modal->opening_balance = $account['opening_balance'];
-        $akun_kas->update();
-        $akun_modal->update();
+        $akun_kas = Account::where('company_id', $company_id)->where('number',110)->update([
+            'opening_balance' => $opening_balance
+        ]);
 
-        $message = "Modal telah ditambahkan sebesar ".$account['opening_balance'];
+        //Akun Modal
+        $akun_modal = Account::where('company_id', $company_id)->where('number', 310)->update([
+            'opening_balance' => $opening_balance
+        ]);
+
+        $message = "Modal telah ditambahkan sebesar ".$opening_balance;
 
         flash($message)->success();
 

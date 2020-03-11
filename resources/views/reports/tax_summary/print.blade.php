@@ -5,7 +5,7 @@
 
 @section('content')
     <div class="box-header">
-        <h2>{{ trans('reports.summary.tax') }}</h2>
+        <h2>Neraca</h2>
         <div class="text-muted">
             {{ setting('general.company_name') }}
             <br/>

@@ -28,9 +28,9 @@
                                 <td><a href="{{ route('accounts.edit', $item->id) }}">{{ $item->name }}</a></td>
                             @endif
 
-                            @php $totals['harta'] += $item->balance; @endphp
+                            @php $totals['harta'] += abs($item->balance); @endphp
                             
-                            <td class="text-right amount-space">@money($item->balance, $item->currency_code, true)</td>
+                            <td class="text-right amount-space">@money(abs($item->balance), $item->currency_code, true)</td>
                             
                         </tr>
                     @endforeach
