@@ -9,6 +9,7 @@ use App\Models\Income\Customer;
 use App\Models\Income\Revenue;
 use App\Models\Expense\Payment as HPP; //For HPP
 use App\Models\Item\Item;
+use App\Models\Relation\UserCompanies;
 use App\Models\Setting\Category;
 use App\Models\Setting\Currency;
 use App\Traits\Currencies;
@@ -89,7 +90,8 @@ class Revenues extends Controller
     public function store(Request $request)
     {
         //dd($request->input());
-
+        $user_id = Auth::user()->id;
+        $company_id = UserCompanies::query()->where('user_id',$user_id)->pluck('company_id')->first();
         // Item Spent
         if ($request->input('item_id')){
             $input['item_id'] = $request->input('item_id');
@@ -111,8 +113,8 @@ class Revenues extends Controller
 
             // Handle Laba
             if ($items_sale_price != $hpp_amount) {
-                $akun_laba = Account::where('company_id', Auth::user()->id)->where('number',330)->first();
-                $kategori_laba = Category::where('company_id', Auth::user()->id)->where('type','income')->where('type_id', 4)->first();
+                $akun_laba = Account::where('company_id', $company_id)->where('number',330)->first();
+                $kategori_laba = Category::where('company_id', $company_id)->where('type','income')->where('type_id', 4)->first();
                 $revenue_laba = Revenue::create([
                     "paid_at" => $request->paid_at,
                     "currency_code" => $request->currency_code,
@@ -135,7 +137,7 @@ class Revenues extends Controller
                 ]);
             }
 
-            $akun_hpp = Category::where('company_id', Auth::user()->id)->where('type','expense')->where('type_id', 4)->first();
+            $akun_hpp = Category::where('company_id', $company_id)->where('type','expense')->where('type_id', 4)->first();
 
             $hpp = HPP::create([
                 "paid_at" => $request->paid_at,

@@ -13,6 +13,7 @@ use App\Models\Setting\Category;
 use App\Traits\DateTime;
 use Charts;
 use Date;
+use Illuminate\Http\Request;
 
 class ProfitLoss extends Controller
 {

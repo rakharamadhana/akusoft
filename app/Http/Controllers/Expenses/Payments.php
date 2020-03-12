@@ -12,7 +12,7 @@ use App\Models\Setting\Currency;
 use App\Traits\Uploads;
 use App\Utilities\Import;
 use App\Utilities\ImportFile;
-//use App\Utilities\Modules;
+use App\Utilities\Modules;
 
 class Payments extends Controller
 {
@@ -31,7 +31,7 @@ class Payments extends Controller
 
         $categories = collect(Category::enabled()->type('expense','hpp')->orderBy('name')->pluck('name', 'id'));
 
-        $accounts = collect(Account::enabled()->orderBy('name')->pluck('name', 'id'));
+        $accounts = collect(Account::enabled()->orderBy('number')->pluck('name', 'id'));
 
         $transfer_cat_id = Category::transfer();
 
@@ -55,7 +55,7 @@ class Payments extends Controller
      */
     public function create()
     {
-        $accounts = Account::enabled()->orderBy('name')->pluck('name', 'id');
+        $accounts = Account::enabled()->orderBy('number')->pluck('name', 'id');
 
         $currencies = Currency::enabled()->orderBy('name')->pluck('name', 'code')->toArray();
 
@@ -69,7 +69,9 @@ class Payments extends Controller
 
         // dd($categories);
 
-        $payment_methods = Account::query()->orderBy('number')->whereBetween('number',[110,120])->pluck('name','id');
+        $payment_methods = Modules::getPaymentMethods();
+
+        //$payment_methods = Account::query()->orderBy('number')->whereBetween('number',[110,120])->pluck('name','id');
 
         return view('expenses.payments.create', compact('accounts', 'currencies', 'account_currency_code', 'currency', 'vendors', 'categories', 'payment_methods'));
     }
@@ -83,11 +85,11 @@ class Payments extends Controller
      */
     public function store(Request $request)
     {
-        $amount = $request->input('amount');
-        $payment_method = Account::query()->where('id', $request->input('payment_method'))->first();
-        $payment_method->update([
-            'opening_balance' => $payment_method['opening_balance'] - $amount
-        ]);
+//        $amount = $request->input('amount');
+//        $payment_method = Account::query()->where('id', $request->input('payment_method'))->first();
+//        $payment_method->update([
+//            'opening_balance' => $payment_method['opening_balance'] - $amount
+//        ]);
 
         $payment = Payment::create($request->input());
 
@@ -214,11 +216,11 @@ class Payments extends Controller
             return redirect('expenses/payments');
         }
 
-        $return_cash = Account::query()->where('id', $payment_method)->first();
-
-        $return_cash->update([
-            'opening_balance' => $return_cash['opening_balance'] + $return_amount
-        ]);
+//        $return_cash = Account::query()->where('id', $payment_method)->first();
+//
+//        $return_cash->update([
+//            'opening_balance' => $return_cash['opening_balance'] + $return_amount
+//        ]);
 
         $payment->recurring()->delete();
         $payment->delete();

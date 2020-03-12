@@ -20,7 +20,7 @@
                 {!! Form::label('account_id', trans_choice('general.accounts', 1), ['class' => 'control-label']) !!}
                 <div class="input-group">
                     <div class="input-group-addon"><i class="fa fa-university"></i></div>
-                    {!! Form::select('account_id', $accounts, setting('general.default_account'), array_merge(['class' => 'form-control', 'placeholder' => trans('general.form.select.field', ['field' => trans_choice('general.accounts', 1)])])) !!}
+                    {!! Form::select('account_id', $accounts) !!}
                     <div class="input-group-append">
                         {!! Form::text('currency', $account_currency_code, ['id' => 'currency', 'class' => 'form-control', 'required' => 'required', 'disabled' => 'disabled']) !!}
                     </div>
@@ -57,13 +57,13 @@
             </div>
             @stack('category_id_input_end')
 
-            {{ Form::recurring('create') }}
+{{--            {{ Form::recurring('create') }}--}}
 
             {{ Form::selectGroup('payment_method', trans_choice('general.payment_methods', 1), 'credit-card', $payment_methods, setting('general.default_payment_method')) }}
 
-            {{ Form::textGroup('reference', trans('general.reference'), 'file-text-o',[]) }}
+{{--            {{ Form::textGroup('reference', trans('general.reference'), 'file-text-o',[]) }}--}}
 
-            {{ Form::fileGroup('attachment', trans('general.attachment')) }}
+{{--            {{ Form::fileGroup('attachment', trans('general.attachment')) }}--}}
         </div>
         <!-- /.box-body -->
 
