@@ -48,7 +48,7 @@ class ProfitLoss extends Controller
 
         $expense_categories = Category::enabled()->type('expense')->orderBy('name')->pluck('name', 'id')->toArray();
 
-        $hpp_categories = Category::enabled()->type('expense')->orderBy('name')->pluck('name', 'id')->toArray();
+        $hpp_categories = Category::enabled()->type('hpp')->orderBy('name')->pluck('name', 'id')->toArray();
 
         // Dates
         for ($j = 1; $j <= 12; $j++) {

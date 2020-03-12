@@ -55,7 +55,7 @@
                                     if($item['type_id']->type_id == 4){
                                         $gross['expense'][$i] += $item['amount'];
                                     } else {
-                                        $gross['expense'][$i] += $item['amount']; 
+                                        $gross['expense'][$i] += $item['amount'];
                                     }
                                 @endphp
                                 <td class="col-sm-2 text-right">@money($item['amount'], setting('general.default_currency'), true)</td>
@@ -90,9 +90,9 @@
                             @foreach($category as $i => $item)                        
                                 @php 
                                     if($item['type_id']->type_id == 4){
-                                        $gross['expense'][$i] -= $item['amount'];
+                                        //$gross['expense'][$i] += $item['amount'];
                                     } else {
-                                        $gross['expense'][$i] += $item['amount']; 
+                                        $gross['expense'][$i] += $item['amount'];
                                     }
                                 @endphp
                                 <td class="col-sm-2 text-right">@money($item['amount'], setting('general.default_currency'), true)</td>
