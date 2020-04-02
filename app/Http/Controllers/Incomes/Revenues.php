@@ -61,7 +61,7 @@ class Revenues extends Controller
      */
     public function create()
     {
-        $accounts = Account::enabled()->orderBy('name')->pluck('name', 'id');
+        $accounts = Account::enabled()->orderBy('number')->pluck('name', 'id');
 
         $items = Item::enabled()->orderBy('name')->pluck('name', 'id');
 
@@ -96,15 +96,15 @@ class Revenues extends Controller
         if ($request->input('item_id')){
             $input['item_id'] = $request->input('item_id');
             $input['quantity'] = $request->input('item_quantity');
-    
-            $items = Item::enabled()->where('id',$input['item_id'])->first();;
-    
+
+            $items = Item::query()->where('id',$input['item_id'])->first();;
+
             $items_sale_price = $items->sale_price * $input['quantity'];
 
             //dd($items_sale_price);
             $items->update([
                 'quantity' => $items['quantity'] - $input['quantity']
-            ]);   
+            ]);
         }
 
         // Jika Penjualan Barang
@@ -115,26 +115,27 @@ class Revenues extends Controller
             if ($items_sale_price != $hpp_amount) {
                 $akun_laba = Account::where('company_id', $company_id)->where('number',330)->first();
                 $kategori_laba = Category::where('company_id', $company_id)->where('type','income')->where('type_id', 4)->first();
-                $revenue_laba = Revenue::create([
-                    "paid_at" => $request->paid_at,
-                    "currency_code" => $request->currency_code,
-                    "currency_rate" => $request->currency_rate,
-                    "amount" => $items_sale_price - $hpp_amount,
-                    "account_id" => $akun_laba->id,
-                    "customer_id" => $request->customer_id,
-                    "income_type" => $request->income_type,
-                    "item_id" => $request->item_id,
-                    "item_quantity" => $request->item_quantity,
-                    "description" => "Laba ".$request->description,
-                    "category_id" => $kategori_laba->id,
-                    "recurring_frequency" => $request->recurring_frequency,
-                    "recurring_interval" => $request->recurring_interval,
-                    "recurring_custom_frequency" => $request->recurring_custom_frequency,
-                    "recurring_count" => $request->recurring_count,
-                    "payment_method" => $request->payment_method,
-                    "reference" => $request->reference,
-                    "company_id" => $request->company_id
-                ]);
+
+//                $revenue_laba = Revenue::create([
+//                    "paid_at" => $request->paid_at,
+//                    "currency_code" => $request->currency_code,
+//                    "currency_rate" => $request->currency_rate,
+//                    "amount" => $items_sale_price - $hpp_amount,
+//                    "account_id" => $akun_laba->id,
+//                    "customer_id" => $request->customer_id,
+//                    "income_type" => $request->income_type,
+//                    "item_id" => $request->item_id,
+//                    "item_quantity" => $request->item_quantity,
+//                    "description" => "Laba ".$request->description,
+//                    "category_id" => $kategori_laba->id,
+//                    "recurring_frequency" => $request->recurring_frequency,
+//                    "recurring_interval" => $request->recurring_interval,
+//                    "recurring_custom_frequency" => $request->recurring_custom_frequency,
+//                    "recurring_count" => $request->recurring_count,
+//                    "payment_method" => $request->payment_method,
+//                    "reference" => $request->reference,
+//                    "company_id" => $request->company_id
+//                ]);
             }
 
             $akun_hpp = Category::where('company_id', $company_id)->where('type','expense')->where('type_id', 4)->first();
@@ -184,9 +185,6 @@ class Revenues extends Controller
         } else {
             $revenue = Revenue::create($request->input());
         }
-
-        
-        
         
         // Upload attachment
         if ($request->file('attachment')) {

@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Expenses;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Expense\Payment as Request;
 use App\Models\Banking\Account;
+use App\Models\Banking\Transfer;
 use App\Models\Expense\Payment;
 use App\Models\Expense\Vendor;
+use App\Models\Income\Revenue;
 use App\Models\Setting\Category;
 use App\Models\Setting\Currency;
 use App\Traits\Uploads;
@@ -85,13 +87,41 @@ class Payments extends Controller
      */
     public function store(Request $request)
     {
-//        $amount = $request->input('amount');
-//        $payment_method = Account::query()->where('id', $request->input('payment_method'))->first();
-//        $payment_method->update([
-//            'opening_balance' => $payment_method['opening_balance'] - $amount
-//        ]);
+        $account_barang_dagang = Account::query()->where('number','140')->pluck('id')->first();
+        $category_barang_dagang = Category::query()->where('name','Barang Dagang')->pluck('id')->first();
+//        dd($category_barang_dagang);
+        if($request->input('income_type') == 1) {
+            $revenue = Revenue::create([
+                "company_id" => $request->input('company_id'),
+                "account_id" => $account_barang_dagang,
+                "paid_at" => $request->input('paid_at'),
+                "amount" => $request->input('amount'),
+                "currency_code" => $request->input('currency_code'),
+                "currency_rate" => $request->input('currency_rate'),
+                "customer_id" => $request->input('vendor_id'),
+                "income_type" => $request->input('income_type'),
+                "description" => $request->input('description'),
+                "category_id" => $category_barang_dagang,
+                "payment_method" => $request->input('payment_method'),
+                "reference" => $request->input('reference'),
+            ]);
 
-        $payment = Payment::create($request->input());
+            $payment = Payment::create([
+                "company_id" => $request->input('company_id'),
+                "account_id" => $request->input('account_id'),
+                "paid_at" => $request->input('paid_at'),
+                "amount" => $request->input('amount'),
+                "currency_code" => $request->input('currency_code'),
+                "currency_rate" => $request->input('currency_rate'),
+                "vendor_id" => $request->input('vendor_id'),
+                "description" => $request->input('description'),
+                "category_id" => $category_barang_dagang,
+                "payment_method" => $request->input('payment_method'),
+                "reference" => $request->input('reference'),
+            ]);
+        }else{
+            $payment = Payment::create($request->input());
+        }
 
         // Upload attachment
         $media = $this->getMedia($request->file('attachment'), 'payments');
@@ -157,7 +187,7 @@ class Payments extends Controller
      */
     public function edit(Payment $payment)
     {
-        $accounts = Account::enabled()->orderBy('name')->pluck('name', 'id');
+        $accounts = Account::enabled()->orderBy('number')->pluck('name', 'id');
 
         $currencies = Currency::enabled()->orderBy('name')->pluck('name', 'code')->toArray();
 
@@ -167,7 +197,7 @@ class Payments extends Controller
 
         $categories = Category::enabled()->type('expense')->where('type_id',5)->orderBy('name')->pluck('name', 'id');
 
-        $payment_methods = Account::query()->orderBy('number')->whereBetween('number',[110,120])->pluck('name','id');
+        $payment_methods = Modules::getPaymentMethods();
 
         return view('expenses.payments.edit', compact('payment', 'accounts', 'currencies', 'currency', 'vendors', 'categories', 'payment_methods'));
     }

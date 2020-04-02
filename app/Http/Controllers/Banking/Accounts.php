@@ -19,9 +19,9 @@ class Accounts extends Controller
      */
     public function index()
     {
-        $accounts = Account::collect();
+        $accounts = Account::query()->orderBy('number')->paginate();
 
-        // dd($accounts);
+        //dd($accounts);
 
         return view('banking.accounts.index', compact('accounts'));
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Reports;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banking\Account;
 use App\Models\Income\Invoice;
 use App\Models\Income\InvoicePayment;
 use App\Models\Income\Revenue;
@@ -247,5 +248,20 @@ class ProfitLoss extends Controller
                 $totals['total']['amount'] -= $amount;
             }
         }
+    }
+
+    /**
+     * @param $profit
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    public function updateProfitLoss($profit){
+        $profitLoss = Account::query()->where('number', '330')->first();
+        $profitLoss->update([
+            'opening_balance' => $profit
+        ]);
+
+        //dd($profitLoss);
+
+        return redirect('reports/profit-loss');
     }
 }

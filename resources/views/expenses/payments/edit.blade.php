@@ -34,7 +34,7 @@
             {{ Form::textGroup('amount', trans('general.amount'), 'money', ['required' => 'required', 'autofocus' => 'autofocus']) }}
 
             @stack('account_id_input_start')
-            <div class="form-group col-md-6 form-small">
+            <div class="form-group col-md-12 form-small">
                 {!! Form::label('account_id', trans_choice('general.accounts', 1), ['class' => 'control-label']) !!}
                 <div class="input-group">
                     <div class="input-group-addon"><i class="fa fa-university"></i></div>
@@ -46,19 +46,19 @@
             </div>
             @stack('account_id_input_end')
 
-            {{ Form::selectGroup('vendor_id', trans_choice('general.vendors', 1), 'user', $vendors, null, []) }}
+{{--            {{ Form::selectGroup('vendor_id', trans_choice('general.vendors', 1), 'user', $vendors, null, []) }}--}}
 
             {{ Form::textareaGroup('description', trans('general.description')) }}
 
             {{ Form::selectGroup('category_id', trans_choice('general.categories', 1), 'folder-open-o', $categories) }}
 
-            {{ Form::recurring('edit', $payment) }}
+{{--            {{ Form::recurring('edit', $payment) }}--}}
 
             {{ Form::selectGroup('payment_method', trans_choice('general.payment_methods', 1), 'credit-card', $payment_methods) }}
 
-            {{ Form::textGroup('reference', trans('general.reference'), 'file-text-o',[]) }}
+{{--            {{ Form::textGroup('reference', trans('general.reference'), 'file-text-o',[]) }}--}}
 
-            {{ Form::fileGroup('attachment', trans('general.attachment')) }}
+{{--            {{ Form::fileGroup('attachment', trans('general.attachment')) }}--}}
         </div>
         <!-- /.box-body -->
 

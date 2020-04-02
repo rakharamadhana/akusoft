@@ -90,7 +90,7 @@
                             @foreach($category as $i => $item)                        
                                 @php 
                                     if($item['type_id']->type_id == 4){
-                                        //$gross['expense'][$i] += $item['amount'];
+                                        $gross['expense'][$i] += $item['amount'];
                                     } else {
                                         $gross['expense'][$i] += $item['amount'];
                                     }
@@ -125,6 +125,7 @@
                 </tr>
             </tbody>
         </table>
+        <span class="new-button"><a href="{{ url('reports/profit-loss/update') }}/{{ $laba }}" class="btn btn-success btn-sm">Update Akun Laba Rugi</a></span>
     </div>
 </div>
 

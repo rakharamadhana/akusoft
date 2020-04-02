@@ -148,7 +148,9 @@ Route::group(['middleware' => 'language'], function () {
                 Route::resource('expense-summary', 'Reports\ExpenseSummary');
                 Route::resource('income-expense-summary', 'Reports\IncomeExpenseSummary');
                 Route::resource('balance-summary', 'Reports\TaxSummary');
+                Route::get('profit-loss/update/{profit}', 'Reports\ProfitLoss@updateProfitLoss')->name('update');
                 Route::resource('profit-loss', 'Reports\ProfitLoss');
+
             });
 
             Route::group(['prefix' => 'settings'], function () {

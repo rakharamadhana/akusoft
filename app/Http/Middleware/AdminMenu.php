@@ -63,7 +63,7 @@ class AdminMenu
             // Incomes
             if ($user->can(['read-incomes-invoices', 'read-incomes-revenues', 'read-incomes-customers'])) {
                 $menu->dropdown(trans_choice('general.incomes', 2), function ($sub) use($user, $attr) {
-                    if ($user->can('read-incomes-invoices')) {
+                    if ($user->can('read-incomes-invoices-off')) {
                         $sub->url('incomes/invoices', trans_choice('general.invoices', 2), 1, $attr);
                     }
 
@@ -71,7 +71,7 @@ class AdminMenu
                         $sub->url('incomes/revenues', trans_choice('general.revenues', 2), 2, $attr);
                     }
 
-                    if ($user->can('read-incomes-customers')) {
+                    if ($user->can('read-incomes-customers-off')) {
                         $sub->url('incomes/customers', trans_choice('general.customers', 2), 3, $attr);
                     }
                 }, 4, [
@@ -83,7 +83,7 @@ class AdminMenu
             // Expenses
             if ($user->can(['read-expenses-bills', 'read-expenses-payments', 'read-expenses-vendors'])) {
                 $menu->dropdown(trans_choice('general.expenses', 2), function ($sub) use($user, $attr) {
-                    if ($user->can('read-expenses-bills')) {
+                    if ($user->can('read-expenses-bills-off')) {
                         $sub->url('expenses/bills', trans_choice('general.bills', 2), 1, $attr);
                     }
 
@@ -91,7 +91,7 @@ class AdminMenu
                         $sub->url('expenses/payments', trans_choice('general.payments', 2), 2, $attr);
                     }
 
-                    if ($user->can('read-expenses-vendors')) {
+                    if ($user->can('read-expenses-vendors-off')) {
                         $sub->url('expenses/vendors', trans_choice('general.vendors', 2), 3, $attr);
                     }
                 }, 4, [
@@ -111,25 +111,25 @@ class AdminMenu
             }
 
             // Banking
-            if ($user->can(['read-banking-transfers', 'read-banking-transactions', 'read-banking-reconciliations'])) {
-                $menu->dropdown(trans('general.banking'), function ($sub) use($user, $attr) {
-
-                    if ($user->can('read-banking-transfers')) {
-                        $sub->url('banking/transfers', trans_choice('general.transfers', 2), 2, $attr);
-                    }
-
-                    if ($user->can('read-banking-transactions-off')) {
-                        $sub->url('banking/transactions', trans_choice('general.transactions', 2), 3, $attr);
-                    }
-
-                    if ($user->can('read-banking-reconciliations-off')) {
-                        $sub->url('banking/reconciliations', trans_choice('general.reconciliations', 2), 4, $attr);
-                    }
-                }, 5, [
-                    'title' => trans('general.banking'),
-                    'icon' => 'fa fa-university',
-                ]);
-            }
+//            if ($user->can(['read-banking-transfers', 'read-banking-transactions', 'read-banking-reconciliations'])) {
+//                $menu->dropdown(trans('general.banking'), function ($sub) use($user, $attr) {
+//
+//                    if ($user->can('read-banking-transfers')) {
+//                        $sub->url('banking/transfers', trans_choice('general.transfers', 2), 2, $attr);
+//                    }
+//
+//                    if ($user->can('read-banking-transactions-off')) {
+//                        $sub->url('banking/transactions', trans_choice('general.transactions', 2), 3, $attr);
+//                    }
+//
+//                    if ($user->can('read-banking-reconciliations-off')) {
+//                        $sub->url('banking/reconciliations', trans_choice('general.reconciliations', 2), 4, $attr);
+//                    }
+//                }, 5, [
+//                    'title' => trans('general.banking'),
+//                    'icon' => 'fa fa-university',
+//                ]);
+//            }
 
             // Reports
             if ($user->can([

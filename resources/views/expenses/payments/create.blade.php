@@ -16,7 +16,7 @@
             {{ Form::textGroup('amount', trans('general.amount'), 'money', ['required' => 'required', 'autofocus' => 'autofocus']) }}
 
             @stack('account_id_input_start')
-            <div class="form-group col-md-6 form-small">
+            <div class="form-group col-md-12 form-small">
                 {!! Form::label('account_id', trans_choice('general.accounts', 1), ['class' => 'control-label']) !!}
                 <div class="input-group">
                     <div class="input-group-addon"><i class="fa fa-university"></i></div>
@@ -28,18 +28,31 @@
             </div>
             @stack('account_id_input_end')
 
-            @stack('vendor_id_input_start')
-            <div class="form-group col-md-6">
-                {!! Form::label('vendor_id', trans_choice('general.vendors', 1), ['class' => 'control-label']) !!}
+            @stack('income_type_input_start')
+            <div class="form-group col-md-12 {{ $errors->has('income_type') ? 'has-error' : ''}}">
+                {!! Form::label('income_type', 'Tipe Pendapatan', ['class' => 'control-label']) !!}
                 <div class="input-group">
-                    <div class="input-group-addon"><i class="fa fa-user"></i></div>
-                    {!! Form::select('vendor_id', $vendors, null, array_merge(['id' => 'vendor_id', 'class' => 'form-control', 'placeholder' => trans('general.form.select.field', ['field' => trans_choice('general.vendors', 1)])])) !!}
-                    <span class="input-group-btn">
-                    <button type="button" id="button-vendor" class="btn btn-default btn-icon"><i class="fa fa-plus"></i></button>
-                </span>
+                    <div class="input-group-addon"><i class="fa fa-bars"></i></div>
+                    {!! Form::select('income_type', array(1 => 'Pembelian Barang', 2 => 'Non Pembelian Barang'), 0, array_merge(['class' => 'form-control', 'placeholder' => trans('general.form.select.field', ['field' => 'Tipe'])])) !!}
+                    <div class="input-group-append">
+                    </div>
                 </div>
+                {!! $errors->first('income_type', '<p class="help-block">:message</p>') !!}
             </div>
-            @stack('vendor_id_input_end')
+            @stack('income_type_input_end')
+
+{{--            @stack('vendor_id_input_start')--}}
+{{--            <div class="form-group col-md-6">--}}
+{{--                {!! Form::label('vendor_id', trans_choice('general.vendors', 1), ['class' => 'control-label']) !!}--}}
+{{--                <div class="input-group">--}}
+{{--                    <div class="input-group-addon"><i class="fa fa-user"></i></div>--}}
+{{--                    {!! Form::select('vendor_id', $vendors, null, array_merge(['id' => 'vendor_id', 'class' => 'form-control', 'placeholder' => trans('general.form.select.field', ['field' => trans_choice('general.vendors', 1)])])) !!}--}}
+{{--                    <span class="input-group-btn">--}}
+{{--                    <button type="button" id="button-vendor" class="btn btn-default btn-icon"><i class="fa fa-plus"></i></button>--}}
+{{--                </span>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--            @stack('vendor_id_input_end')--}}
 
             {{ Form::textareaGroup('description', trans('general.description')) }}
 
@@ -49,9 +62,9 @@
                 <div class="input-group">
                     <div class="input-group-addon"><i class="fa fa-folder-open-o"></i></div>
                     {!! Form::select('category_id', $categories, null, array_merge(['class' => 'form-control', 'placeholder' => trans('general.form.select.field', ['field' => trans_choice('general.categories', 1)])])) !!}
-                    <div class="input-group-btn">
-                        <button type="button" id="button-category" class="btn btn-default btn-icon"><i class="fa fa-plus"></i></button>
-                    </div>
+{{--                    <div class="input-group-btn">--}}
+{{--                        <button type="button" id="button-category" class="btn btn-default btn-icon"><i class="fa fa-plus"></i></button>--}}
+{{--                    </div>--}}
                 </div>
                 {!! $errors->first('category_id', '<p class="help-block">:message</p>') !!}
             </div>

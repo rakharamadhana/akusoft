@@ -100,13 +100,13 @@
 
             {{ Form::selectGroup('category_id', trans_choice('general.categories', 1), 'folder-open-o', $categories) }}
 
-            {{ Form::recurring('edit', $revenue) }}
+{{--            {{ Form::recurring('edit', $revenue) }}--}}
 
             {{ Form::selectGroup('payment_method', trans_choice('general.payment_methods', 1), 'credit-card', $payment_methods) }}
 
-            {{ Form::textGroup('reference', trans('general.reference'), 'file-text-o',[]) }}
+{{--            {{ Form::textGroup('reference', trans('general.reference'), 'file-text-o',[]) }}--}}
 
-            {{ Form::fileGroup('attachment', trans('general.attachment')) }}
+{{--            {{ Form::fileGroup('attachment', trans('general.attachment')) }}--}}
         </div>
         <!-- /.box-body -->
 

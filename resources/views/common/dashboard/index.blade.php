@@ -5,15 +5,6 @@
 @section('content')
     <div class="row">
         <div class="col-md-6">
-            <a href="{{ url('incomes/invoices/create') }}">
-            <div class="info-box bg-red">
-                <span class="info-box-icon"><i class="fa fa-money"></i></span>
-                <div class="info-box-content">
-                    <h1>Piutang</h1>
-                </div><!-- /.info-box-content -->
-            </div><!-- /.info-box -->
-            </a>
-
             <a href="{{ url('incomes/revenues/create') }}">
             <div class="info-box bg-yellow">
                 <span class="info-box-icon"><i class="fa fa-money"></i></span>
@@ -25,15 +16,6 @@
         </div>
 
         <div class="col-md-6">
-            <a href="{{ url('expenses/bills/create') }}">
-            <div class="info-box bg-green">
-                <span class="info-box-icon"><i class="fa fa-shopping-cart"></i></span>
-                <div class="info-box-content">
-                    <h1>Hutang</h1>
-                </div><!-- /.info-box-content -->
-            </div><!-- /.info-box -->
-            </a>
-
             <a href="{{ url('expenses/payments/create') }}">
             <div class="info-box bg-blue">
                 <span class="info-box-icon"><i class="fa fa-shopping-cart"></i></span>
