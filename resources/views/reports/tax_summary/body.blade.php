@@ -31,7 +31,7 @@
                             @php $totals['harta'] += abs($item->balance); @endphp
                             
                             <td class="text-right amount-space">@money(abs($item->balance), $item->currency_code, true)</td>
-                            
+
                         </tr>
                     @endforeach
                 @else

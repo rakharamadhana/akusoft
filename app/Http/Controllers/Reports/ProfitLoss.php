@@ -47,7 +47,7 @@ class ProfitLoss extends Controller
 
         $income_categories = Category::enabled()->type('income')->orderBy('name')->where('type_id',3)->pluck('name', 'id')->toArray();
 
-        $expense_categories = Category::enabled()->type('expense')->orderBy('name')->pluck('name', 'id')->toArray();
+        $expense_categories = Category::enabled()->type('expense')->whereBetween('type_id', [4,5])->orderBy('name')->pluck('name', 'id')->toArray();
 
         $hpp_categories = Category::enabled()->type('hpp')->orderBy('name')->pluck('name', 'id')->toArray();
 

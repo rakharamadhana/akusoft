@@ -138,25 +138,9 @@ class Revenues extends Controller
 //                ]);
             }
 
+            $akun_persediaan = Account::where('company_id', $company_id)->where('number',140)->first();
+            $akun_peralatan = Account::where('company_id', $company_id)->where('number',180)->first();
             $akun_hpp = Category::where('company_id', $company_id)->where('type','expense')->where('type_id', 4)->first();
-
-            $hpp = HPP::create([
-                "paid_at" => $request->paid_at,
-                "currency_code" => $request->currency_code,
-                "currency_rate" => $request->currency_rate,
-                "amount" => $hpp_amount,
-                "account_id" => $request->account_id,
-                "vendor_id" => null,
-                "description" => $request->description,
-                "category_id" => $akun_hpp->id, //Akun HPP
-                "recurring_frequency" => $request->recurring_frequency,
-                "recurring_interval" => $request->recurring_interval,
-                "recurring_custom_frequency" => $request->recurring_custom_frequency,
-                "recurring_count" => $request->recurring_count,
-                "payment_method" => $request->payment_method,
-                "reference" => $request->reference,
-                "company_id" => $request->company_id
-            ]);
 
             if ($request->input('amount') != $items_sale_price) {
                 $revenue = Revenue::create([
@@ -182,6 +166,24 @@ class Revenues extends Controller
             } else {
                 $revenue = Revenue::create($request->input());
             }
+
+            $hpp = HPP::create([
+                "paid_at" => $request->paid_at,
+                "currency_code" => $request->currency_code,
+                "currency_rate" => $request->currency_rate,
+                "amount" => $hpp_amount,
+                "account_id" => $akun_persediaan->getAttribute('id'), // Akun Persediaan
+                "vendor_id" => null,
+                "description" => $request->description,
+                "category_id" => $akun_hpp->getAttribute('id'), //Akun HPP
+                "recurring_frequency" => $request->recurring_frequency,
+                "recurring_interval" => $request->recurring_interval,
+                "recurring_custom_frequency" => $request->recurring_custom_frequency,
+                "recurring_count" => $request->recurring_count,
+                "payment_method" => $request->payment_method,
+                "reference" => $request->reference,
+                "company_id" => $request->company_id
+            ]);
         } else {
             $revenue = Revenue::create($request->input());
         }

@@ -67,7 +67,10 @@ class Payments extends Controller
 
         $vendors = Vendor::enabled()->orderBy('name')->pluck('name', 'id');
 
-        $categories = Category::enabled()->where('type','expense')->where('type_id',5)->orderBy('name')->pluck('name', 'id');
+        $categories = Category::query()
+            ->where('type','expense')
+            ->whereBetween('type_id',[5,6])
+            ->orderBy('name')->pluck('name', 'id');
 
         // dd($categories);
 
@@ -88,37 +91,73 @@ class Payments extends Controller
     public function store(Request $request)
     {
         $account_barang_dagang = Account::query()->where('number','140')->pluck('id')->first();
-        $category_barang_dagang = Category::query()->where('name','Barang Dagang')->pluck('id')->first();
-//        dd($category_barang_dagang);
-        if($request->input('income_type') == 1) {
-            $revenue = Revenue::create([
-                "company_id" => $request->input('company_id'),
-                "account_id" => $account_barang_dagang,
-                "paid_at" => $request->input('paid_at'),
-                "amount" => $request->input('amount'),
-                "currency_code" => $request->input('currency_code'),
-                "currency_rate" => $request->input('currency_rate'),
-                "customer_id" => $request->input('vendor_id'),
-                "income_type" => $request->input('income_type'),
-                "description" => $request->input('description'),
-                "category_id" => $category_barang_dagang,
-                "payment_method" => $request->input('payment_method'),
-                "reference" => $request->input('reference'),
-            ]);
+        $category_barang_dagang = Category::query()->where('name','140 Persediaan Barang Dagang')->pluck('id')->first();
+        $account_peralatan_usaha = Account::query()->where('number','180')->pluck('id')->first();
+        $category_peralatan_usaha = Category::query()->where('name','180 Peralatan Usaha')->pluck('id')->first();
 
-            $payment = Payment::create([
-                "company_id" => $request->input('company_id'),
-                "account_id" => $request->input('account_id'),
-                "paid_at" => $request->input('paid_at'),
-                "amount" => $request->input('amount'),
-                "currency_code" => $request->input('currency_code'),
-                "currency_rate" => $request->input('currency_rate'),
-                "vendor_id" => $request->input('vendor_id'),
-                "description" => $request->input('description'),
-                "category_id" => $category_barang_dagang,
-                "payment_method" => $request->input('payment_method'),
-                "reference" => $request->input('reference'),
-            ]);
+        if($request->input('income_type') == 1) {
+            if($request->input('category_id') == $category_barang_dagang){
+                $revenue = Revenue::create([
+                    "company_id" => $request->input('company_id'),
+                    "account_id" => $account_barang_dagang,
+                    "paid_at" => $request->input('paid_at'),
+                    "amount" => $request->input('amount'),
+                    "currency_code" => $request->input('currency_code'),
+                    "currency_rate" => $request->input('currency_rate'),
+                    "customer_id" => $request->input('vendor_id'),
+                    "income_type" => $request->input('income_type'),
+                    "description" => $request->input('description'),
+                    "category_id" => $category_barang_dagang,
+                    "payment_method" => $request->input('payment_method'),
+                    "reference" => $request->input('reference'),
+                ]);
+
+                $payment = Payment::create([
+                    "company_id" => $request->input('company_id'),
+                    "account_id" => $request->input('account_id'),
+                    "paid_at" => $request->input('paid_at'),
+                    "amount" => $request->input('amount'),
+                    "currency_code" => $request->input('currency_code'),
+                    "currency_rate" => $request->input('currency_rate'),
+                    "vendor_id" => $request->input('vendor_id'),
+                    "description" => $request->input('description'),
+                    "category_id" => $category_barang_dagang,
+                    "payment_method" => $request->input('payment_method'),
+                    "reference" => $request->input('reference'),
+                ]);
+            }else if($request->input('category_id') == $category_peralatan_usaha){
+                $revenue = Revenue::create([
+                    "company_id" => $request->input('company_id'),
+                    "account_id" => $account_peralatan_usaha,
+                    "paid_at" => $request->input('paid_at'),
+                    "amount" => $request->input('amount'),
+                    "currency_code" => $request->input('currency_code'),
+                    "currency_rate" => $request->input('currency_rate'),
+                    "customer_id" => $request->input('vendor_id'),
+                    "income_type" => $request->input('income_type'),
+                    "description" => $request->input('description'),
+                    "category_id" => $category_peralatan_usaha,
+                    "payment_method" => $request->input('payment_method'),
+                    "reference" => $request->input('reference'),
+                ]);
+
+                $payment = Payment::create([
+                    "company_id" => $request->input('company_id'),
+                    "account_id" => $request->input('account_id'),
+                    "paid_at" => $request->input('paid_at'),
+                    "amount" => $request->input('amount'),
+                    "currency_code" => $request->input('currency_code'),
+                    "currency_rate" => $request->input('currency_rate'),
+                    "vendor_id" => $request->input('vendor_id'),
+                    "description" => $request->input('description'),
+                    "category_id" => $category_peralatan_usaha,
+                    "payment_method" => $request->input('payment_method'),
+                    "reference" => $request->input('reference'),
+                ]);
+            }
+
+
+
         }else{
             $payment = Payment::create($request->input());
         }

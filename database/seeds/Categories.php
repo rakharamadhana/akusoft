@@ -74,6 +74,22 @@ class Categories extends Seeder
             ],
             [
                 'company_id' => $company_id,
+                'name' => '140 Persediaan Barang Dagang',
+                'type' => 'expense',
+                'type_id' => '6',
+                'color' => '#c99736',
+                'enabled' => '1'
+            ],
+            [
+                'company_id' => $company_id,
+                'name' => '180 Peralatan Usaha',
+                'type' => 'expense',
+                'type_id' => '6',
+                'color' => '#c99736',
+                'enabled' => '1'
+            ],
+            [
+                'company_id' => $company_id,
                 'name' => '510 Harga Pokok Penjualan (HPP)',
                 'type' => 'expense',
                 'type_id' => '4',
