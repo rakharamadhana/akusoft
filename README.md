@@ -4,6 +4,12 @@
 [![PHP Version](https://img.shields.io/badge/PHP-%3E%3D5.6.4%20%7C%207.x-blue.svg)](https://php.net)
 [![License](https://img.shields.io/badge/License-GPL--3.0-green.svg)](LICENSE.txt)
 
+> [!WARNING]
+> **DEPRECATED & UNMAINTAINED**
+> 
+> This version of **Akusoft** is no longer maintained.
+> It has been replaced by **[akusoft V3](https://github.com/rakharamadhana/akusoftV3)**. Please refer to [https://github.com/rakharamadhana/akusoftV3](https://github.com/rakharamadhana/akusoftV3) for the active codebase, ongoing development, and updates.
+
 **Akaunting** is an open-source online accounting software designed for small businesses and freelancers. Built on the Laravel PHP framework, it provides invoicing, expense tracking, client management, and financial reporting out of the box.
 
 ---
